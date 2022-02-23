@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js rust">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>类型大小 - The Rust Performance Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html" class="active"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">12.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">13.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">14.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">15.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">16.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">17.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">18.</strong> 编译时间</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Performance Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/Blues-star/perf-book-zh/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="type-sizes"><a class="header" href="#type-sizes">Type Sizes</a></h1>
+<p>缩小常实例类型可以减少峰值内存使用量，还可以通过减少内存流量和缓存压力来提高性能。(特别要注意的是，大于128字节的类型会用 <code>memcpy</code>而不是内联代码)</p>
+<p>Rust编译器会自动对struct和enums中的字段进行排序，以最小化它们的大小（除非指定了<code>#[repr(C)]</code>属性），所以你不必担心字段的排序。但是仍然有其他方法可以使热类型的大小最小化。</p>
+<h2 id="measuring-type-sizes"><a class="header" href="#measuring-type-sizes">Measuring Type Sizes</a></h2>
+<p><a href="https://doc.rust-lang.org/std/mem/fn.size_of.html"><code>std::mem::size_of</code></a>给出了一个类型的大小，以字节为单位，但通常你也想知道确切的布局。例如，一个枚举可能会出乎意料的大，这可能是由一个超大的变体造成的。</p>
+<p>`-Zprint-type-sizes’选项正是这样做的，它在rustc的发行版上没有被启用，所以你需要使用rustc的夜间版本。 下面是一个通过Cargo的可能调用</p>
+<pre><code class="language-text">RUSTFLAGS=-Zprint-type-sizes cargo +nightly build --release
+</code></pre>
+<p>而这里是一个rustc的可能调用</p>
+<pre><code class="language-text">rustc +nightly -Zprint-type-sizes input.rs
+</code></pre>
+<p>它将打印出所有使用中的类型的尺寸、布局和对齐方式的详细信息。例如，对于这种类型。</p>
+<pre><pre class="playground"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum E {
+    A,
+    B(i32),
+    C(u64, u8, u64, u8),
+    D(Vec&lt;u32&gt;),
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>它打印以下信息，以及一些内置类型的信息。</p>
+<pre><code class="language-text">print-type-size type: `E`: 32 bytes, alignment: 8 bytes
+print-type-size     discriminant: 1 bytes
+print-type-size     variant `D`: 31 bytes
+print-type-size         padding: 7 bytes
+print-type-size         field `.0`: 24 bytes, alignment: 8 bytes
+print-type-size     variant `C`: 23 bytes
+print-type-size         field `.1`: 1 bytes
+print-type-size         field `.3`: 1 bytes
+print-type-size         padding: 5 bytes
+print-type-size         field `.0`: 8 bytes, alignment: 8 bytes
+print-type-size         field `.2`: 8 bytes
+print-type-size     variant `B`: 7 bytes
+print-type-size         padding: 3 bytes
+print-type-size         field `.0`: 4 bytes, alignment: 4 bytes
+print-type-size     variant `A`: 0 bytes
+</code></pre>
+<p>输出显示以下内容。</p>
+<ul>
+<li>类型的大小和排列。</li>
+<li>对于enums，判别子的大小。</li>
+<li>对于enums，每个变量的大小（从最大到最小排序）。</li>
+<li>所有字段的大小、对齐和排序。(请注意，编译器对变体<code>C</code>的字段进行了重新排序，以最小化<code>E</code>的大小。)</li>
+<li>所有padding的大小和位置。</li>
+</ul>
+<p>一旦你知道了热型的布局，就有多种方法来收缩它。</p>
+<h2 id="smaller-enums"><a class="header" href="#smaller-enums">Smaller Enums</a></h2>
+<p>如果一个枚举有一个超大的变体，可以考虑将一个或多个字段装箱。例如，你可以改变这个类型。</p>
+<pre><pre class="playground"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type LargeType = [u8; 100];
+enum A {
+    X,
+    Y(i32),
+    Z(i32, LargeType),
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>修改为：</p>
+<pre><pre class="playground"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">type LargeType = [u8; 100];
+</span>enum A {
+    X,
+    Y(i32),
+    Z(Box&lt;(i32, LargeType)&gt;),
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>这减少了类型大小，但代价是需要为<code>A::Z</code>变体分配一个额外的堆。如果<code>A::Z</code>变体比较少见，这更有可能成为提高性能的好方法。<code>Box</code>也会使<code>A::Z</code>的使用略微不符合人的直觉，特别是在<code>匹配</code>模式中。
+<a href="https://github.com/rust-lang/rust/pull/37445/commits/a920e355ea837a950b484b5791051337cd371f5d"><strong>Example 1</strong></a>,
+<a href="https://github.com/rust-lang/rust/pull/55346/commits/38d9277a77e982e49df07725b62b21c423b6428e"><strong>Example 2</strong></a>,
+<a href="https://github.com/rust-lang/rust/pull/64302/commits/b972ac818c98373b6d045956b049dc34932c41be"><strong>Example 3</strong></a>,
+<a href="https://github.com/rust-lang/rust/pull/64374/commits/2fcd870711ce267c79408ec631f7eba8e0afcdf6"><strong>Example 4</strong></a>,
+<a href="https://github.com/rust-lang/rust/pull/64394/commits/7f0637da5144c7435e88ea3805021882f077d50c"><strong>Example 5</strong></a>,
+<a href="https://github.com/rust-lang/rust/pull/71942/commits/27ae2f0d60d9201133e1f9ec7a04c05c8e55e665"><strong>Example 6</strong></a>.</p>
+<h2 id="smaller-integers"><a class="header" href="#smaller-integers">Smaller Integers</a></h2>
+<p>通常可以通过使用较小的整数类型来缩小类型。例如，虽然对索引使用 “usize “是最自然的，但将索引存储为 “u32”、“u16”、甚至 “u8”，然后在使用点强制使用 “usize”，往往是合理的。
+<a href="https://github.com/rust-lang/rust/pull/49993/commits/4d34bfd00a57f8a8bdb60ec3f908c5d4256f8a9a"><strong>Example 1</strong></a>,
+<a href="https://github.com/rust-lang/rust/pull/50981/commits/8d0fad5d3832c6c1f14542ea0be038274e454524"><strong>Example 2</strong></a>.</p>
+<h2 id="boxed-slices"><a class="header" href="#boxed-slices">Boxed Slices</a></h2>
+<p>Rust向量包含三个词：一个长度、一个容量和一个指针。如果你有一个将来不太可能被改变的向量，你可以用<a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_boxed_slice"><code>Vec::into_boxed_slice</code></a>把它转换为一个<em>boxed slice</em>。一个boxed slice只包含两个词，一个长度和一个指针。任何多余的元素容量都会被丢弃，这可能会导致重新分配。</p>
+<pre><pre class="playground"><code class="language-rust edition2018">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use std::mem::{size_of, size_of_val};
+</span>let v: Vec&lt;u32&gt; = vec![1, 2, 3];
+assert_eq!(size_of_val(&amp;v), 3 * size_of::&lt;usize&gt;());
+
+let bs: Box&lt;[u32]&gt; = v.into_boxed_slice();
+assert_eq!(size_of_val(&amp;bs), 2 * size_of::&lt;usize&gt;());
+<span class="boring">}
+</span></code></pre></pre>
+<p>盒状切片可以用<a href="https://doc.rust-lang.org/std/primitive.slice.html#method.into_vec"><code>slice::into_vec</code></a>转换回一个矢量，而无需任何克隆或重新分配。</p>
+<h2 id="avoiding-regressions"><a class="header" href="#avoiding-regressions">Avoiding Regressions</a></h2>
+<p>如果一个类型足够热，它的大小会影响性能，那么最好使用静态断言来确保它不会意外地回归。下面的例子使用了<a href="https://crates.io/crates/static_assertions"><code>static_assertions</code></a>中的一个宏。</p>
+<pre><code class="language-rust ignore">  // This type is used a lot. Make sure it doesn't unintentionally get bigger.
+  #[cfg(target_arch = &quot;x86_64&quot;)]
+  static_assertions::assert_eq_size!(HotType, [u8; 64]);
+</code></pre>
+<p><code>cfg</code>属性很重要，因为类型大小在不同的平台上会有所不同。将断言限制在 “x86_64”(通常是最广泛使用的平台)可能足以防止实际中的回落。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="heap-allocations_zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="standard-library-types_zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="heap-allocations_zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="standard-library-types_zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
