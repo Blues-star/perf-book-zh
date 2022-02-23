@@ -15,4 +15,4 @@ edition = "2018"
 curly-quotes = true
 default-theme = "rust"
 git-repository-url = "https://github.com/Blues-star/perf-book-zh/"
-site-url = "https://nnethercote.github.io/perf-book/"
+site-url = "https://blues-star.github.io/perf-book-zh/"
