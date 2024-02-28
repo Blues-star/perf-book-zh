@@ -178,40 +178,34 @@
                     <main>
                         <h1 id="编译时间"><a class="header" href="#编译时间">编译时间</a></h1>
 <p>虽然本书的主要内容是提高Rust程序的性能，但本节的内容是关于减少Rust程序的编译时间，因为这是很多人感兴趣的相关话题。</p>
-<h2 id="linking"><a class="header" href="#linking">Linking</a></h2>
-<p>编译时间的很大一部分其实是链接时间，尤其是在小改动后重新构建程序的时候。在Linux和Windows上，你可以选择lld作为链接器，这比默认的链接器快得多。</p>
-<p>要从命令行指定ld，在你的编译命令前加上<code>RUSTFLAGS="-C link-arg=-fuse-ld=lld"</code>。</p>
-<p>要从<code>Cargo.toml</code>文件中指定lld，请添加这些行。</p>
-<pre><code class="language-text">[build]
-rustflags = ["-C", "link-arg=-fuse-ld=lld"]
-</code></pre>
-<p>或者，增加如下配置</p>
-<pre><code class="language-text">[target.x86_64-unknown-linux-gnu]
-linker = "lld"
-</code></pre>
-<p>您可以使用<a href="https://doc.rust-lang.org/cargo/reference/config.html">Cargo配置文件</a>将这些配置应用于多个项目。</p>
-<p>lld还没有完全支持在Rust中使用，但它应该可以在Linux和Windows中的大多数情况下使用。有一个<a href="https://github.com/rust-lang/rust/issues/39915#issuecomment-618726211">GitHub Issue</a>跟踪lld的完整支持。</p>
-<h2 id="incremental-compilation"><a class="header" href="#incremental-compilation">Incremental Compilation</a></h2>
-<p>Rust编译器支持<a href="https://blog.rust-lang.org/2016/09/08/incremental.html">增量编译</a>，这可以避免在重新编译一个装箱时重做工作。它可以大大加快编译速度，但代价是有时会使生成的可执行文件运行得更慢一些。出于这个原因，它只在调试编译时默认启用。如果你想在发布版本的编译中也启用它，请在<code>Cargo.toml</code>文件中添加以下行。</p>
-<pre><code class="language-toml">[profile.release]
-incremental = true
-</code></pre>
-<p>关于 “lto “设置以及为不同的配置文件启用特定设置的详细信息，请参见<a href="https://doc.rust-lang.org/cargo/reference/profiles.html#incremental">Cargo documentation</a>。</p>
+<p><a href="build-configuration.html#minimizing-compile-times">减少编译时间</a>部分讨论了通过构建配置选择来减少编译时间的方法。本节的其余部分将讨论需要修改程序代码来减少编译时间的方法。</p>
 <h2 id="可视化"><a class="header" href="#可视化">可视化</a></h2>
 <p>Rust编译器有一个功能，可以让你可视化编译你的程序。用这个命令进行编译。</p>
-<pre><code class="language-text">cargo +nightly build -Ztimings
+<pre><code class="language-text">cargo build --timings
 </code></pre>
-<p>完成后，它将打印一个HTML文件的名称。在网络浏览器中打开该文件。它包含了一个<a href="https://en.wikipedia.org/wiki/Gantt_chart">Gantt chart</a>，显示了你的程序中各个箱子之间的依赖关系。这显示了你的装箱图中有多少并行性，这可以说明是否应该将任何串行化编译的大装箱打散。</p>
+<p>完成后，它将打印一个HTML文件的名称。在Web浏览器中打开该文件。其中包含一个<a href="https://en.wikipedia.org/wiki/Gantt_chart">Gantt chart</a>，显示程序中各个crate之间的依赖关系。这显示了您的crate图中有多少并行性，这可以表明是否应该拆分任何序列化编译的大型crate。有关如何阅读这些图表的更多详细信息，请参阅<a href="https://doc.rust-lang.org/nightly/cargo/reference/timings.html">timings</a>。</p>
 <h2 id="llvm-ir"><a class="header" href="#llvm-ir">LLVM IR</a></h2>
 <p>Rust编译器的后端使用<a href="https://llvm.org/">LLVM</a>。LLVM的执行会占到编译时间的很大一部分，尤其是当Rust编译器的前端会产生大量的<a href="https://en.wikipedia.org/wiki/Intermediate_representation">IR</a>，这需要LLVM花很长的时间去优化。</p>
 <p>这些问题可以用[<code>cargo llvm-line</code>]来诊断，它显示了哪些Rust函数导致了最多的LLVM IR生成。通用函数通常是最重要的函数，因为它们在大型程序中可以被实例化几十次甚至几百次。</p>
 <p>如果一个通用函数导致IR膨胀，有几种方法可以解决。最简单的方法就是把函数变小。
-<a href="https://github.com/rust-lang/rust/pull/72166/commits/5a0ac0552e05c079f252482cfcdaab3c4b39d614"><strong>Example</strong></a>.</p>
-<p>另一种方法是将函数的非通用部分移到一个单独的非通用函数中，这个函数将只被实例化一次。这是否可能取决于泛型函数的细节。非通用函数通常可以写成通用函数中的一个内部函数，以尽量减少它对代码其余部分的暴露。
-<a href="https://github.com/rust-lang/rust/pull/72013/commits/68b75033ad78d88872450a81745cacfc11e58178"><strong>Example</strong></a>.</p>
+<a href="https://github.com/rust-lang/rust/pull/72166/commits/5a0ac0552e05c079f252482cfcdaab3c4b39d614"><strong>Example 1</strong></a>,
+<a href="https://github.com/rust-lang/rust/pull/91246/commits/f3bda74d363a060ade5e5caeb654ba59bfed51a4"><strong>Example 2</strong></a>.</p>
+<p>另一种方法是将函数的非泛型部分移动到一个单独的非泛型函数中，该函数只会被实例化一次。是否可能取决于泛型函数的细节。当可能时，非泛型函数通常可以被整洁地编写为泛型函数内部的内部函数，就像<a href="https://doc.rust-lang.org/std/fs/fn.read.html"><code>std::fs::read</code></a>的代码所示：</p>
+<pre><code class="language-rust ignore">pub fn read&lt;P: AsRef&lt;Path&gt;&gt;(path: P) -&gt; io::Result&lt;Vec&lt;u8&gt;&gt; {
+    fn inner(path: &amp;Path) -&gt; io::Result&lt;Vec&lt;u8&gt;&gt; {
+        let mut file = File::open(path)?;
+        let size = file.metadata().map(|m| m.len()).unwrap_or(0);
+        let mut bytes = Vec::with_capacity(size as usize);
+        io::default_read_to_end(&amp;mut file, &amp;mut bytes)?;
+        Ok(bytes)
+    }
+    inner(path.as_ref())
+}</code></pre>
+<p><a href="https://github.com/rust-lang/rust/pull/72013/commits/68b75033ad78d88872450a81745cacfc11e58178"><strong>Example</strong></a>.</p>
 <p>有时，像<a href="https://doc.rust-lang.org/std/option/enum.Option.html#method.map"><code>Option::map</code></a>和<a href="https://doc.rust-lang.org/std/result/enum.Result.html#method.map_err"><code>Result::map_err</code></a>这样的常用实用函数会被实例化多次。 用等价的<code>match</code>表达式替换它们可以帮助编译时间。</p>
 <p>这些变化对编译时间的影响通常是很小的，但偶尔也会很大。
 <a href="https://github.com/servo/servo/issues/26585"><strong>Example</strong></a>.</p>
+<p>这些更改还可以减少二进制文件的大小。</p>
 
                     </main>
 

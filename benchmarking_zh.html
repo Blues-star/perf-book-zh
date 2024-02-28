@@ -177,12 +177,17 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="benchmarking"><a class="header" href="#benchmarking">Benchmarking</a></h1>
-<p>在优化一个程序时，你需要一种方法来可靠地回答 “这个改变是否加快了程序？“这个问题。这个过程有时被称为基准测试(benchmarking)。基准测试是一个复杂的话题，彻底的覆盖范围超出了本书的范围，但以下是基本的内容。</p>
-<p>首先，你需要工作负载来衡量。理想情况下，你会有各种工作负载，代表你的程序的实际使用情况。使用真实世界输入的工作负载是最好的，但<a href="https://stackoverflow.com/questions/2842695/what-is-microbenchmarking">microbenchmarks</a>和<a href="https://en.wikipedia.org/wiki/Stress_testing_(software)">压力测试(stress tests)</a>在适度的情况下也是有用的。</p>
-<p>其次，你需要一种运行工作负载的方法，这也将决定使用的指标。Rust内置的<a href="https://doc.rust-lang.org/1.7.0/book/benchmark-tests.html">基准测试(benchmark tests)</a>是一个简单的起点。<a href="https://github.com/bheisler/criterion.rs">Criterion</a>是一个更复杂的选择。自定义benchmarking harnesses也是可能的。例如，<a href="https://github.com/rust-lang/rustc-perf/">rustc-perf</a>就是用来对Rust编译器进行基准测试的harnesses。</p>
-<p>当涉及到度量时，有许多选择，正确的选择将取决于被基准化的程序的性质。例如，对批处理程序有意义的指标可能对交互式程序没有意义。在许多情况下，Wall-time是一个显而易见的选择，因为它与用户的感知相对应。然而，它可能会受到大幅变化的影响。特别是，内存布局的微小变化可能会导致显著但短暂的性能波动。因此，方差较小的其他指标（如周期或指令数）可能是一个合理的选择。</p>
-<p>从多个工作负载中总结测量结果也是一个挑战，尽管有多种方法，但并没有一种方法是最完美的。</p>
-<p>良好好的基准测试是很难实现的。总而言之，不要过于强调拥有一个完美的基准测试设置，特别是当你开始优化一个程序的时候。一个平庸的设置比没有设置要好得多。对你正在测量的东西保持开放的心态，随着时间的推移，你可以在了解你的程序的性能特点后进行基准测试改进。</p>
+<p>基准测试通常涉及比较执行相同任务的两个或多个程序的性能。有时可能涉及比较两个或多个不同的程序，例如 <code>Firefox</code> vs <code>Safari</code> vs <code>Chrome</code>。有时涉及比较同一程序的两个不同版本。后一种情况让我们能够可靠地回答问题“这个变化是否加快了速度？”</p>
+<p>基准测试是一个复杂的主题，全面覆盖超出了本书的范围，但以下是基础知识。</p>
+<p>首先，您需要工作负载来进行测量。理想情况下，您会有各种代表程序实际使用情况的工作负载。使用真实世界输入的工作负载最好，但<a href="https://stackoverflow.com/questions/2842695/what-is-microbenchmarking">microbenchmarks</a>和<a href="https://en.wikipedia.org/wiki/Stress_testing_(software)">压力测试</a>在适度的情况下也是有用的。</p>
+<p>其次，您需要一种运行工作负载的方式，这也将决定所使用的度量标准。</p>
+<p>Rust 内置的<a href="https://doc.rust-lang.org/nightly/unstable-book/library-features/test.html">benchmark tests</a>是一个简单的起点，但它们使用不稳定的功能，因此仅适用于夜间版的 Rust。
+<a href="https://github.com/bheisler/criterion.rs">Criterion</a> 和 <a href="https://github.com/nvzqz/divan">Divan</a> 是更复杂的替代方案。
+<a href="https://github.com/sharkdp/hyperfine">Hyperfine</a> 是一个出色的通用基准测试工具。
+也可以使用自定义基准测试工具。例如，<a href="https://github.com/rust-lang/rustc-perf/">rustc-perf</a> 是用于对 Rust 编译器进行基准测试的工具。</p>
+<p>在度量标准方面，有许多选择，选择合适的度量标准取决于正在进行基准测试的程序的性质。例如，对于<code>批处理程序</code>(batch program)有意义的度量标准可能对<code>交互式程序</code>(interactive program)没有意义。在许多情况下，<code>Wall-time</code>是一个显而易见的选择，因为它对应于用户的感知。然而，它可能受到高方差的影响。特别是，内存布局中微小的变化可能导致显著但短暂的性能波动。因此，具有较低方差的其他度量标准（如周期cycles或指令计数）可能是一个合理的替代方案。</p>
+<p>总结来自多个工作负载的测量结果也是一个挑战，有许多方法可以做到这一点，没有一种方法显然是最好的。</p>
+<p>良好的基准测试很困难。话虽如此，在拟进行程序优化时，不要过分强调拥有完美的基准测试设置，尤其是在开始优化程序时。一般的基准测试要比没有基准测试好得多。保持对您正在测量的内容开放的态度，随着时间的推移，您可以根据了解到的程序性能特征进行基准测试改进。</p>
 
                     </main>
 
