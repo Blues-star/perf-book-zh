@@ -1,0 +1,19 @@
+        modified:   .github/workflows/ci.yml
+        modified:   .gitignore
+        modified:   src/benchmarking.md
+        new file:   src/bounds-checks.md
+        modified:   src/build-configuration.md
+        modified:   src/compile-times.md
+        modified:   src/general-tips.md
+        modified:   src/hashing.md
+        modified:   src/heap-allocations.md
+        modified:   src/inlining.md
+        modified:   src/introduction.md
+        modified:   src/io.md
+        modified:   src/iterators.md
+        modified:   src/linting.md
+        modified:   src/logging-and-debugging.md
+        modified:   src/machine-code.md
+        modified:   src/profiling.md
+        modified:   src/standard-library-types.md
+        modified:   src/type-sizes.md
