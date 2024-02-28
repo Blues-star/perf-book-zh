@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="zh" class="sidebar-visible no-js rust">
+<html lang="zh" class="rust" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -8,10 +8,9 @@
 
         <!-- Custom HTML head -->
         
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
@@ -32,15 +31,16 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -56,51 +56,82 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('rust')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
 
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html" class="active"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">12.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">13.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">14.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">15.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">16.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">17.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">18.</strong> 编译时间</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
                             <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
@@ -135,7 +166,7 @@
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -221,15 +252,13 @@
 <h2 id="clone"><a class="header" href="#clone"><code>clone</code></a></h2>
 <p>在一个包含堆分配内存的值上调用[clone]通常会涉及额外的分配。例如，在一个非空的<code>Vec</code>上调用<code>clone</code>，需要对元素进行新的分配（但请注意，新<code>Vec</code>的容量可能与原<code>Vec</code>的容量不同）。例外的情况是<code>Rc</code>/<code>Arc</code>，<code>clone</code>的调用只是增加引用数。</p>
 <p><a href="https://doc.rust-lang.org/std/clone/trait.Clone.html#method.clone_from"><code>clone_from</code></a>是<code>clone</code>的替代方法。<code>a.clone_from(&amp;b)</code>相当于<code>a = b.clone()</code>，但可以避免不必要的分配。例如，如果你想在一个现有的<code>Vec</code>之上克隆一个<code>Vec</code>，现有<code>Vec</code>的堆分配将尽可能地被重复使用，如下例所示。</p>
-<pre><pre class="playground"><code class="language-rust edition2018">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut v1: Vec&lt;u32&gt; = Vec::with_capacity(99);
 let v2: Vec&lt;u32&gt; = vec![1, 2, 3];
 v1.clone_from(&amp;v2); // v1's allocation is reused
 assert_eq!(v1.capacity(), 99);
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>虽然<code>clone</code>通常会造成分配，但在很多情况下使用它是一件很合理的事情，往往可以使代码更简单。使用剖析数据来查看哪些<code>clone</code>调用是热门的，值得花力气去避免。</p>
 <p>有时，由于(a)程序员的错误，或(b)代码中的变化，使以前必要的<code>clone</code>调用变得不必要，Rust代码最终会包含不必要的<code>clone</code>调用。如果你看到一个似乎没有必要的热<code>clone</code>调用，有时可以简单地删除它。
 <a href="https://github.com/rust-lang/rust/pull/37318/commits/e382267cfb9133ef12d59b66a2935ee45b546a61"><strong>Example 1</strong></a>,
@@ -242,24 +271,20 @@ assert_eq!(v1.capacity(), 99);
 <h2 id="reusing-collections"><a class="header" href="#reusing-collections">Reusing Collections</a></h2>
 <p>有时你需要分阶段建立一个集合，如<code>Vec</code>。通常情况下，通过修改一个<code>Vec</code>比建立多个<code>Vec</code>然后将它们组合起来更好。</p>
 <p>例如，如果你有一个函数 “do_stuff”，产生一个 “Vec”，可能会被多次调用。</p>
-<pre><pre class="playground"><code class="language-rust edition2018">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn do_stuff(x: u32, y: u32) -&gt; Vec&lt;u32&gt; {
     vec![x, y]
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>It might be better to instead modify a passed-in <code>Vec</code>:</p>
-<pre><pre class="playground"><code class="language-rust edition2018">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn do_stuff(x: u32, y: u32, vec: &amp;mut Vec&lt;u32&gt;) {
     vec.push(x);
     vec.push(y);
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>有时，值得保留一个可以重复使用的 “主力“集合。例如，如果一个循环的每次迭代都需要一个<code>Vec</code>，你可以在循环外声明<code>Vec</code>，在循环体中使用它，然后在循环体结束时调用<a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.clear"><code>clear</code></a>（清空<code>Vec</code>而不影响它的容量）。这避免了分配，但代价是掩盖了一个事实，即每次迭代对<code>Vec</code>的使用与其他迭代无关。
 <a href="https://github.com/rust-lang/rust/pull/77990/commits/45faeb43aecdc98c9e3f2b24edf2ecc71f39d323"><strong>Example 1</strong></a>,
 <a href="https://github.com/rust-lang/rust/pull/51870/commits/b0c78120e3ecae5f4043781f7a3f79e2277293e7"><strong>Example 2</strong></a>.</p>
@@ -268,12 +293,11 @@ assert_eq!(v1.capacity(), 99);
 <p>另一个提高分配量大的Rust程序性能的选择是用一个替代分配器代替默认的（系统）分配器。确切的效果将取决于单个程序和选择的替代分配器。在不同的平台上，它也会有所不同，因为每个平台的系统分配器都有自己的优势和弱点。使用替代分配器也会影响二进制大小。</p>
 <p>一个流行的替代分配器是<a href="https://github.com/jemalloc/jemalloc">jemalloc</a>，可通过 <a href="https://crates.io/crates/jemallocator"><code>jemallocator</code></a>箱子。要使用它，请在你的<code>Cargo.toml</code>文件中添加一个依赖关系。</p>
 <pre><code class="language-toml">[dependencies]
-jemallocator = &quot;0.3.2&quot;
+jemallocator = "0.3.2"
 </code></pre>
 <p>然后在你的Rust代码中添加以下内容。</p>
 <pre><code class="language-rust ignore">#[global_allocator]
-static GLOBAL: jemallocator::Jemalloc = jemallocator::Jemalloc;
-</code></pre>
+static GLOBAL: jemallocator::Jemalloc = jemallocator::Jemalloc;</code></pre>
 <p>另一个可供选择的分配器是<a href="https://github.com/microsoft/mimalloc">mimalloc</a>，可通过<a href="https://docs.rs/mimalloc/0.1.22/mimalloc/"><code>mimalloc</code></a>板房使用。</p>
 
                     </main>
@@ -284,7 +308,7 @@ static GLOBAL: jemallocator::Jemalloc = jemallocator::Jemalloc;
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="type-sizes_zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="type-sizes_zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -298,7 +322,7 @@ static GLOBAL: jemallocator::Jemalloc = jemallocator::Jemalloc;
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="type-sizes_zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="type-sizes_zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
@@ -308,21 +332,22 @@ static GLOBAL: jemallocator::Jemalloc = jemallocator::Jemalloc;
 
 
 
-        <script type="text/javascript">
+        <script>
             window.playground_copyable = true;
         </script>
 
 
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
 
 
+    </div>
     </body>
 </html>
