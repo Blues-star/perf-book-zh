@@ -4,15 +4,16 @@ The previous sections of this book have discussed Rust-specific techniques.
 This section gives a brief overview of some general performance principles.
 
 As long as the obvious pitfalls are avoided (e.g. [using non-release builds]),
-Rust generally has good performance. Especially if you are used to
-dynamically-typed languages such as Python and Ruby.
+Rust code generally is fast and uses little memory. Especially if you are used
+to dynamically-typed languages such as Python and Ruby, or statically-types
+languages with a garbage collector such as Java and C#.
 
 [using non-release builds]: build-configuration.md
 
 Optimized code is often more complex and takes more effort to write than
 unoptimized code. For this reason, it is only worth optimizing hot code.
 
-The biggest performance improvement often come from changes to algorithms or
+The biggest performance improvements often come from changes to algorithms or
 data structures, rather than low-level optimizations.
 [**Example 1**](https://github.com/rust-lang/rust/pull/53383/commits/5745597e6195fe0591737f242d02350001b6c590),
 [**Example 2**](https://github.com/rust-lang/rust/pull/54318/commits/154be2c98cf348de080ce951df3f73649e8bb1a6).
@@ -30,8 +31,8 @@ When profiling indicates that a function is hot, there are two common ways to
 speed things up: (a) make the function faster, and/or (b) avoid calling it as
 much.
 
-It is usually easier, and often as effective, to avoid silly slowdowns as it
-is to introduce clever speedups.
+It is often easier to eliminate silly slowdowns than it is to introduce clever
+speedups.
 
 Avoid computing things unless necessary. Lazy/on-demand computations are
 often a win.

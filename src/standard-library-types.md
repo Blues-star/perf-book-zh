@@ -1,13 +1,15 @@
 # Standard Library Types
 
 It is worth reading through the documentation for common standard library
-types—such as [`Vec`], [`Option`], [`Result`], and [`Rc`]—to find interesting
+types—such as [`Box`], [`Vec`], [`Option`], [`Result`], and [`Rc`]/[`Arc`]—to find interesting
 functions that can sometimes be used to improve performance.
 
+[`Box`]: https://doc.rust-lang.org/std/boxed/struct.Box.html
 [`Vec`]: https://doc.rust-lang.org/std/vec/struct.Vec.html
 [`Option`]: https://doc.rust-lang.org/std/option/enum.Option.html
 [`Result`]: https://doc.rust-lang.org/std/result/enum.Result.html
 [`Rc`]: https://doc.rust-lang.org/std/rc/struct.Rc.html
+[`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
 
 It is also worth knowing about high-performance alternatives to standard
 library types, such as [`Mutex`], [`RwLock`], [`Condvar`], and
@@ -18,7 +20,24 @@ library types, such as [`Mutex`], [`RwLock`], [`Condvar`], and
 [`Condvar`]: https://doc.rust-lang.org/std/sync/struct.Condvar.html
 [`Once`]: https://doc.rust-lang.org/std/sync/struct.Once.html
 
+## `Box`
+
+The expression [`Box::default()`] has the same effect as
+`Box::new(T::default())` but can be faster because the compiler can create the
+value directly on the heap, rather than constructing it on the stack and then
+copying it over.
+[**Example**](https://github.com/komora-io/art/commit/d5dc58338f475709c375e15976d0d77eb5d7f7ef).
+
+[`Box::default()`]: https://doc.rust-lang.org/std/boxed/struct.Box.html#method.default
+
 ## `Vec`
+
+The best way to create a zero-filled `Vec` of length `n` is with `vec![0; n]`.
+This is simple and probably [as fast or faster] than alternatives, such as
+using `resize`, `extend`, or anything involving `unsafe`, because it can use OS
+assistance.
+
+[as fast or faster]: https://github.com/rust-lang/rust/issues/54628
 
 [`Vec::remove`] removes an element at a particular index and shifts all
 subsequent elements one to the left, which makes it O(n). [`Vec::swap_remove`]
@@ -65,23 +84,35 @@ There are similar alternatives for [`Option::map_or`], [`Option::unwrap_or`],
 [`Result::map_or`]: https://doc.rust-lang.org/std/result/enum.Result.html#method.map_or
 [`Result::unwrap_or`]: https://doc.rust-lang.org/std/result/enum.Result.html#method.unwrap_or
 
-## `Rc`
+## `Rc`/`Arc`
 
-[`Rc::make_mut`] provides clone-on-write semantics for `Rc`. It makes a mutable
-reference to an `Rc`. If the refcount is greater than one, it will `clone` the
-inner value to ensure unique ownership; otherwise, it will modify the original
-value. It is not needed often, but it can be extremely useful on occasion.
+[`Rc::make_mut`]/[`Arc::make_mut`] provide clone-on-write semantics. They make
+a mutable reference to an `Rc`/`Arc`. If the refcount is greater than one, they
+will `clone` the inner value to ensure unique ownership; otherwise, they will
+modify the original value. They are not needed often, but they can be extremely
+useful on occasion.
 [**Example 1**](https://github.com/rust-lang/rust/pull/65198/commits/3832a634d3aa6a7c60448906e6656a22f7e35628),
 [**Example 2**](https://github.com/rust-lang/rust/pull/65198/commits/75e0078a1703448a19e25eac85daaa5a4e6e68ac).
 
 [`Rc::make_mut`]: https://doc.rust-lang.org/std/rc/struct.Rc.html#method.make_mut
+[`Arc::make_mut`]: https://doc.rust-lang.org/std/sync/struct.Arc.html#method.make_mut
 
 ## `Mutex`, `RwLock`, `Condvar`, and `Once`
 
 The [`parking_lot`] crate provides alternative implementations of these
-synchronization types that are smaller, faster, and more flexible than those in
-the standard library. The APIs and semantics of the `parking_lot` types are
+synchronization types. The APIs and semantics of the `parking_lot` types are
 similar but not identical to those of the equivalent types in the standard
 library.
 
+The `parking_lot` versions used to be reliably smaller, faster, and more
+flexible than those in the standard library, but the standard library versions
+have greatly improved on some platforms. So you should measure before switching
+to `parking_lot`. 
+
 [`parking_lot`]: https://crates.io/crates/parking_lot
+
+If you decide to universally use the `parking_lot` types it is easy to
+accidentally use the standard library equivalents in some places. You can [use
+Clippy] to avoid this problem.
+
+[use Clippy]: linting.md#disallowing-types

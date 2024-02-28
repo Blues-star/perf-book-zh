@@ -1,7 +1,11 @@
 # Benchmarking
 
-When optimizing a program, you need a way to reliably answer the question "did
-this change speed things up?" This process is sometimes called benchmarking.
+Benchmarking typically involves comparing the performance of two or more
+programs that do the same thing. Sometimes this might involve comparing two or
+more different programs, e.g. Firefox vs Safari vs Chrome. Sometimes it
+involves comparing two different versions of the same program. This latter case
+lets us reliably answer the question "did this change speed things up?"
+
 Benchmarking is a complex topic and a thorough coverage is beyond the scope of
 this book, but here are the basics.
 
@@ -14,13 +18,18 @@ useful in moderation.
 [stress tests]: https://en.wikipedia.org/wiki/Stress_testing_(software)
 
 Second, you need a way to run the workloads, which will also dictate the
-metrics used. Rust's built-in [benchmark tests] are a simple starting point.
-[Criterion] is a more sophisticated alternative. Custom benchmarking harnesses
-are also possible. For example, [rustc-perf] is the harness used to benchmark
-the Rust compiler.
+metrics used.
+- Rust's built-in [benchmark tests] are a simple starting point, but they use
+  unstable features and therefore only work on nightly Rust.
+- [Criterion] and [Divan] are more sophisticated alternatives.
+- [Hyperfine] is an excellent general-purpose benchmarking tool.
+- Custom benchmarking harnesses are also possible. For example, [rustc-perf] is
+  the harness used to benchmark the Rust compiler.
 
-[benchmark tests]: https://doc.rust-lang.org/1.7.0/book/benchmark-tests.html
+[benchmark tests]: https://doc.rust-lang.org/nightly/unstable-book/library-features/test.html
 [Criterion]: https://github.com/bheisler/criterion.rs
+[Divan]: https://github.com/nvzqz/divan
+[Hyperfine]: https://github.com/sharkdp/hyperfine
 [rustc-perf]: https://github.com/rust-lang/rustc-perf/
 
 When it comes to metrics, there are many choices, and the right one(s) will
@@ -37,6 +46,7 @@ are a variety of ways to do it, with no single method being obviously best.
 
 Good benchmarking is hard. Having said that, do not stress too much about
 having a perfect benchmarking setup, particularly when you start optimizing a
-program. A mediocre setup is far better than no setup. Keep an open mind about
-what you are measuring, and over time you can make benchmarking improvements as
-you learn about the performance characteristics of your program.
+program. Mediocre benchmarking is far better than no benchmarking. Keep an open
+mind about what you are measuring, and over time you can make benchmarking
+improvements as you learn about the performance characteristics of your
+program.

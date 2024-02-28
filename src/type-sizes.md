@@ -1,20 +1,26 @@
 # Type Sizes
 
-Shrinking oft-instantiated types can reduce peak memory usage, and also
-improve performance by reducing memory traffic and cache pressure. (In
-particular, note that types that are larger than 128 bytes are copied with
-`memcpy` rather than inline code.)
+Shrinking oft-instantiated types can help performance.
 
-The Rust compiler automatically sorts the fields in struct and enums to
-minimize their sizes (unless the `#[repr(C)]` attribute is specified), so you
-do not have to worry about field ordering. But there are still other ways to
-minimize the size of hot types.
+For example, if memory usage is high, a heap profiler like [DHAT] can identify
+the hot allocation points and the types involved. Shrinking these types can
+reduce peak memory usage, and possibly improve performance by reducing memory
+traffic and cache pressure.
+
+[DHAT]: https://www.valgrind.org/docs/manual/dh-manual.html
+
+Furthermore, Rust types that are larger than 128 bytes are copied with `memcpy`
+rather than inline code. If `memcpy` shows up in non-trivial amounts in
+profiles, DHAT's "copy profiling" mode will tell you exactly where the hot
+`memcpy` calls are and the types involved. Shrinking these types to 128 bytes
+or less can make the code faster by avoiding `memcpy` calls and reducing memory
+traffic.
 
 ## Measuring Type Sizes
 
 [`std::mem::size_of`] gives the size of a type, in bytes, but often you want to
-know the exact layout as well. For example, an enum might be surprisingly big,
-which might be caused by one outsized variant.
+know the exact layout as well. For example, an enum might be surprisingly large
+due to a single outsized variant.
 
 [`std::mem::size_of`]: https://doc.rust-lang.org/std/mem/fn.size_of.html
 
@@ -64,7 +70,19 @@ The output shows the following.
   reordered variant `C`'s fields to minimize the size of `E`.)
 - The size and location of all padding.
 
+Alternatively, the [top-type-sizes] crate can be used to display the output in
+a more compact form.
+
+[top-type-sizes]: https://crates.io/crates/top-type-sizes
+
 Once you know the layout of a hot type, there are multiple ways to shrink it.
+
+## Field Ordering
+
+The Rust compiler automatically sorts the fields in struct and enums to
+minimize their sizes (unless the `#[repr(C)]` attribute is specified), so you
+do not have to worry about field ordering. But there are other ways to minimize
+the size of hot types.
 
 ## Smaller Enums
 
@@ -128,6 +146,19 @@ without any cloning or a reallocation.
 [`Vec::into_boxed_slice`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_boxed_slice
 [`slice::into_vec`]: https://doc.rust-lang.org/std/primitive.slice.html#method.into_vec
 
+## `ThinVec`
+
+An alternative to boxed slices is `ThinVec`, from the [`thin_vec`] crate. It is
+functionally equivalent to `Vec`, but stores the length and capacity in the
+same allocation as the elements (if there are any). This means that
+`size_of::<ThinVec<T>>` is only one word.
+
+`ThinVec` is a good choice within oft-instantiated types for vectors that are
+often empty. It can also be used to shrink the largest variant of an enum, if
+that variant contains a `Vec`.
+
+[`thin_vec`]: https://crates.io/crates/thin-vec
+
 ## Avoiding Regressions
 
 If a type is hot enough that its size can affect performance, it is a good idea
@@ -144,4 +175,3 @@ widely-used platform) is likely to be good enough to prevent regressions in
 practice.
 
 [`static_assertions`]: https://crates.io/crates/static_assertions
-

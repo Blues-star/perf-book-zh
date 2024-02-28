@@ -1,6 +1,6 @@
 # Heap Allocations
 
-Heap allocations are moderately expensive. The exact details depend on
+Heap allocations are moderately expensive. The exact details depend on which
 allocator is in use, but each allocation (and deallocation) typically involves
 acquiring a global lock, doing some non-trivial data structure manipulation,
 and possibly executing a system call. Small allocations are not necessarily
@@ -19,11 +19,11 @@ If a general-purpose profiler shows `malloc`, `free`, and related functions as
 hot, then it is likely worth trying to reduce the allocation rate and/or using
 an alternative allocator.
 
-[DHAT] is an excellent profiler to use when reducing allocation rates. It
-precisely identifies hot allocation sites and their allocation rates. Exact
-results will vary, but experience with rustc has shown that reducing allocation
-rates by 10 allocations per million instructions executed can have measurable
-performance improvements (e.g. ~1%).
+[DHAT] is an excellent profiler to use when reducing allocation rates. It works
+on Linux and some other Unixes. It precisely identifies hot allocation
+sites and their allocation rates. Exact results will vary, but experience with
+rustc has shown that reducing allocation rates by 10 allocations per million
+instructions executed can have measurable performance improvements (e.g. ~1%).
 
 [DHAT]: https://www.valgrind.org/docs/manual/dh-manual.html
 
@@ -55,12 +55,12 @@ for, and how often they are accessed.
 ## `Box`
 
 [`Box`] is the simplest heap-allocated type. A `Box<T>` value is a `T` value
-that is allocated on the heap. 
+that is allocated on the heap.
 
 [`Box`]: https://doc.rust-lang.org/std/boxed/struct.Box.html
 
 It is sometimes worth boxing one or more fields in a struct or enum fields to
-make a type smaller. (See the the [Type Sizes](type-sizes.md) chapter for more
+make a type smaller. (See the [Type Sizes](type-sizes.md) chapter for more
 about this.)
 
 Other than that, `Box` is straightforward and does not offer much scope for
@@ -104,14 +104,14 @@ When the vector needs to grow beyond its current capacity, the elements will be
 copied into a larger heap allocation, and the old heap allocation will be
 freed.
 
-### `Vec` growth
+### `Vec` Growth
 
 A new, empty `Vec` created by the common means
 ([`vec![]`](https://doc.rust-lang.org/std/macro.vec.html)
 or [`Vec::new`] or [`Vec::default`]) has a length and capacity of zero, and no
 heap allocation is required. If you repeatedly push individual elements onto
 the end of the `Vec`, it will periodically reallocate. The growth strategy is
-not specified, but at the time of writing it uses a quasi-doubling stategy
+not specified, but at the time of writing it uses a quasi-doubling strategy
 resulting in the following capacities: 0, 4, 8, 16, 32, 64, and so on. (It
 skips directly from 0 to 4, instead of going via 1 and 2, because this [avoids
 many allocations] in practice.) As a vector grows, the frequency of
@@ -124,7 +124,7 @@ excess capacity will increase exponentially.
 
 This growth strategy is typical for growable data structures and reasonable in
 the general case, but if you know in advance the likely length of a vector you
-can do often do better. If you have a hot vector allocation site (e.g. a hot
+can often do better. If you have a hot vector allocation site (e.g. a hot
 [`Vec::push`] call), it is worth using [`eprintln!`] to print the vector length
 at that site and then doing some post-processing (e.g. with [`counts`]) to
 determine the length distribution. For example, you might have many short
@@ -179,7 +179,7 @@ one at a time would result in four allocations (for capacities of 4, 8, 16, and
 [`Vec::reserve_exact`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.reserve_exact
 
 If you know the maximum length of a vector, the above functions also let you
-not allocate excess space unnecessary. Similarly, [`Vec::shrink_to_fit`] can be
+not allocate excess space unnecessarily. Similarly, [`Vec::shrink_to_fit`] can be
 used to minimize wasted space, but note that it may cause a reallocation.
 
 [`Vec::shrink_to_fit`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.shrink_to_fit
@@ -187,8 +187,8 @@ used to minimize wasted space, but note that it may cause a reallocation.
 ## `String`
 
 A [`String`] contains heap-allocated bytes. The representation and operation of
-`String` is very similar to a `Vec<u8>`. Many `Vec` methods relating to growth
-and capacity have equivalents for `String`, such as
+`String` are very similar to that of `Vec<u8>`. Many `Vec` methods relating to
+growth and capacity have equivalents for `String`, such as
 [`String::with_capacity`].
 
 [`String`]: https://doc.rust-lang.org/std/string/struct.String.html
@@ -199,12 +199,24 @@ type.
 
 [`smallstr`]: https://crates.io/crates/smallstr
 
+The `String` type from the [`smartstring`] crate is a drop-in replacement for
+`String` that avoids heap allocations for strings with less than three words'
+worth of characters. On 64-bit platforms, this is any string that is less than
+24 bytes, which includes all strings containing 23 or fewer ASCII characters.
+[**Example**](https://github.com/djc/topfew-rs/commit/803fd566e9b889b7ba452a2a294a3e4df76e6c4c).
+
+[`smartstring`]: https://crates.io/crates/smartstring
+
 Note that the `format!` macro produces a `String`, which means it performs an
 allocation. If you can avoid a `format!` call by using a string literal, that
 will avoid this allocation.
 [**Example**](https://github.com/rust-lang/rust/pull/55905/commits/c6862992d947331cd6556f765f6efbde0a709cf9).
+[`std::format_args`] and/or the [`lazy_format`] crate may help with this.
 
-## Hash tables
+[`std::format_args`]: https://doc.rust-lang.org/std/macro.format_args.html
+[`lazy_format`]: https://crates.io/crates/lazy_format
+
+## Hash Tables
 
 [`HashSet`] and [`HashMap`] are hash tables. Their representation and
 operations are similar to those of `Vec`, in terms of allocations: they have
@@ -216,30 +228,6 @@ growth and capacity have equivalents for `HashSet`/`HashMap`, such as
 [`HashSet`]: https://doc.rust-lang.org/std/collections/struct.HashSet.html
 [`HashMap`]: https://doc.rust-lang.org/std/collections/struct.HashMap.html
 [`HashSet::with_capacity`]: https://doc.rust-lang.org/std/collections/struct.HashSet.html#method.with_capacity
-
-## `Cow`
-
-Sometimes you have some borrowed data, such as a `&str`, that is mostly
-read-only but occasionally needs to be modified. Cloning the data every time
-would be wasteful. Instead you can use "clone-on-write" semantics via the
-[`Cow`] type, which can represent both borrowed and owned data.
-
-[`Cow`]: https://doc.rust-lang.org/std/borrow/enum.Cow.html
-
-Typically, when starting with a borrowed value `x` you wrap it in a `Cow` with
-`Cow::Borrowed(x)`. Because `Cow` implements [`Deref`], you can call
-non-mutating methods directly on the data it encloses. If mutation is desired,
-[`Cow::to_mut`] will obtain a mutable reference to an owned value, cloning if
-necessary.
-
-[`Deref`]: https://doc.rust-lang.org/std/ops/trait.Deref.html
-[`Cow::to_mut`]: https://doc.rust-lang.org/std/borrow/enum.Cow.html#method.to_mut
-
-`Cow` can be fiddly to get working, but it is often worth the effort.
-[**Example 1**](https://github.com/rust-lang/rust/pull/37064/commits/b043e11de2eb2c60f7bfec5e15960f537b229e20),
-[**Example 2**](https://github.com/rust-lang/rust/pull/50855/commits/ad471452ba6fbbf91ad566dc4bdf1033a7281811),
-[**Example 3**](https://github.com/rust-lang/rust/pull/56336/commits/787959c20d062d396b97a5566e0a766d963af022),
-[**Example 4**](https://github.com/rust-lang/rust/pull/68848/commits/67da45f5084f98eeb20cc6022d68788510dc832a).
 
 ## `clone`
 
@@ -284,11 +272,70 @@ allocations. For example, it can be used to create a `String` from a `&str`.
 
 [`ToOwned::to_owned`]: https://doc.rust-lang.org/std/borrow/trait.ToOwned.html#tymethod.to_owned
 
-Sometimes `to_owned` calls can be avoided by storing a reference to borrowed
-data in a struct rather than an owned copy. This requires lifetime annotations
-on the struct, complicating the code, and should only be done when profiling
-and benchmarking shows that it is worthwhile.
+Sometimes `to_owned` calls (and related calls such as `clone` and `to_string`)
+can be avoided by storing a reference to borrowed data in a struct rather than
+an owned copy. This requires lifetime annotations on the struct, complicating
+the code, and should only be done when profiling and benchmarking shows that it
+is worthwhile.
 [**Example**](https://github.com/rust-lang/rust/pull/50855/commits/6872377357dbbf373cfd2aae352cb74cfcc66f34).
+
+## `Cow`
+
+Sometimes code deals with a mixture of borrowed and owned data. Imagine a
+vector of error messages, some of which are static string literals and some of
+which are constructed with `format!`. The obvious representation is
+`Vec<String>`, as the following example shows.
+```rust
+let mut errors: Vec<String> = vec![];
+errors.push("something went wrong".to_string());
+errors.push(format!("something went wrong on line {}", 100));
+```
+That requires a `to_string` call to promote the static string literal to a
+`String`, which incurs an allocation.
+
+Instead you can use the [`Cow`] type, which can hold either borrowed or owned
+data. A borrowed value `x` is wrapped with `Cow::Borrowed(x)`, and an owned
+value `y` is wrapped with `Cow::Owned(y)`. `Cow` also implements the `From<T>`
+trait for various string, slice, and path types, so you can usually use `into`
+as well. (Or `Cow::from`, which is longer but results in more readable code,
+because it makes the type clearer.) The following example puts all this together.
+
+[`Cow`]: https://doc.rust-lang.org/std/borrow/enum.Cow.html
+
+```rust
+use std::borrow::Cow;
+let mut errors: Vec<Cow<'static, str>> = vec![];
+errors.push(Cow::Borrowed("something went wrong"));
+errors.push(Cow::Owned(format!("something went wrong on line {}", 100)));
+errors.push(Cow::from("something else went wrong"));
+errors.push(format!("something else went wrong on line {}", 101).into());
+```
+`errors` now holds a mixture of borrowed and owned data without requiring any
+extra allocations. This example involves `&str`/`String`, but other pairings
+such as `&[T]`/`Vec<T>` and `&Path`/`PathBuf` are also possible. 
+
+[**Example 1**](https://github.com/rust-lang/rust/pull/37064/commits/b043e11de2eb2c60f7bfec5e15960f537b229e20),
+[**Example 2**](https://github.com/rust-lang/rust/pull/56336/commits/787959c20d062d396b97a5566e0a766d963af022).
+
+All of the above applies if the data is immutable. But `Cow` also allows
+borrowed data to be promoted to owned data if it needs to be mutated.
+[`Cow::to_mut`] will obtain a mutable reference to an owned value, cloning if
+necessary. This is called "clone-on-write", which is where the name `Cow` comes
+from.
+
+[`Deref`]: https://doc.rust-lang.org/std/ops/trait.Deref.html
+[`Cow::to_mut`]: https://doc.rust-lang.org/std/borrow/enum.Cow.html#method.to_mut
+
+This clone-on-write behaviour is useful when you have some borrowed data, such
+as a `&str`, that is mostly read-only but occasionally needs to be modified.
+
+[**Example 1**](https://github.com/rust-lang/rust/pull/50855/commits/ad471452ba6fbbf91ad566dc4bdf1033a7281811),
+[**Example 2**](https://github.com/rust-lang/rust/pull/68848/commits/67da45f5084f98eeb20cc6022d68788510dc832a).
+
+Finally, because `Cow` implements [`Deref`], you can call methods directly on
+the data it encloses. 
+
+`Cow` can be fiddly to get working, but it is often worth the effort.
 
 ## Reusing Collections
 
@@ -321,32 +368,67 @@ each iteration's usage of the `Vec` is unrelated to the others.
 
 [`clear`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.clear
 
-Similarly, it is sometimes worth keeping a "workhorse" collection within a
+Similarly, it is sometimes worth keeping a workhorse collection within a
 struct, to be reused in one or more methods that are called repeatedly.
+
+## Reading Lines from a File
+
+[`BufRead::lines`] makes it easy to read a file one line at a time:
+```rust
+# fn blah() -> Result<(), std::io::Error> {
+# fn process(_: &str) {}
+use std::io::{self, BufRead};
+let mut lock = io::stdin().lock();
+for line in lock.lines() {
+    process(&line?);
+}
+# Ok(())
+# }
+```
+But the iterator it produces returns `io::Result<String>`, which means it
+allocates for every line in the file.
+
+[`BufRead::lines`]: https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.lines
+
+An alternative is to use a workhorse `String` in a loop over
+[`BufRead::read_line`]:
+```rust
+# fn blah() -> Result<(), std::io::Error> {
+# fn process(_: &str) {}
+use std::io::{self, BufRead};
+let mut lock = io::stdin().lock();
+let mut line = String::new();
+while lock.read_line(&mut line)? != 0 {
+    process(&line);
+    line.clear();
+}
+# Ok(())
+# }
+```
+This reduces the number of allocations to at most a handful, and possibly just
+one. (The exact number depends on how many times `line` needs to be
+reallocated, which depends on the distribution of line lengths in the file.)
+
+This will only work if the loop body can operate on a `&str`, rather than a
+`String`.
+
+[`BufRead::read_line`]: https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.read_line
+
+[**Example**](https://github.com/nnethercote/counts/commit/7d39bbb1867720ef3b9799fee739cd717ad1539a).
 
 ## Using an Alternative Allocator
 
-Another option for improving the performance of allocation-heavy Rust programs
-is to replace the default (system) allocator with an alternative allocator. The
-exact effect will depend on the individual program and the alternative
-allocator chosen. It will also vary across platforms, because each platform's
-system allocator has its own strengths and weaknesses. The use of an
-alternative allocator can also affect binary size.
+It is also possible to improve heap allocation performance without changing
+your code, simply by using a different allocator. See the [Alternative
+Allocators] section for details.
 
-One popular alternative allocator is [jemalloc], usable via the
-[`jemallocator`] crate. To use it, add a dependency to your `Cargo.toml` file:
-```toml
-[dependencies]
-jemallocator = "0.3.2"
-```
-Then add the following somewhere in your Rust code:
-```rust,ignore
-#[global_allocator]
-static GLOBAL: jemallocator::Jemalloc = jemallocator::Jemalloc;
-```
-Another alternative allocator is [mimalloc], usable via the [`mimalloc`] crate.
+[Alternative Allocators]: build-configuration.md#alternative-allocators
 
-[jemalloc]: https://github.com/jemalloc/jemalloc
-[`jemallocator`]: https://crates.io/crates/jemallocator
-[mimalloc]: https://github.com/microsoft/mimalloc
-[`mimalloc`]: https://docs.rs/mimalloc/0.1.22/mimalloc/
+## Avoiding Regressions
+
+To ensure the number and/or size of allocations done by your code doesn't
+increase unintentionally, you can use the *heap usage testing* feature of
+[dhat-rs] to write tests that check particular code snippets allocate the
+expected amount of heap memory.
+
+[dhat-rs]: https://crates.io/crates/dhat
