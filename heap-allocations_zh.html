@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html" class="active"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">12.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">13.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">14.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">15.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">16.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">17.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">18.</strong> 编译时间</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html" class="active"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="bounds-checks_zh.html"><strong aria-hidden="true">12.</strong> 边界检查</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">13.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">14.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">15.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">16.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">17.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">18.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">19.</strong> 编译时间</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -268,6 +268,29 @@ assert_eq!(v1.capacity(), 99);
 <p><code>ToOwned::to_owned</code>]是为许多常见类型实现的。它从借来的数据中创建拥有的数据，通常是通过克隆的方式，因此经常会引起堆分配。例如，它可以用来从一个<code>&amp;str</code>创建一个<code>String</code>。</p>
 <p>有时，可以通过在结构中存储对借入数据的引用而不是自有副本来避免<code>to_owned</code>调用。这需要在结构体上做终身注解，使代码复杂化，只有在分析和基准测试表明值得时才可以这样做。
 <a href="https://github.com/rust-lang/rust/pull/50855/commits/6872377357dbbf373cfd2aae352cb74cfcc66f34"><strong>Example</strong></a>.</p>
+<h2 id="cow-1"><a class="header" href="#cow-1"><code>Cow</code></a></h2>
+<p>有时代码处理的是借用和拥有数据的混合。想象一下一个包含错误消息的向量，其中一些是静态字符串字面量，另一些是用 <code>format!</code> 构造的。显而易见的表示是 <code>Vec&lt;String&gt;</code>，如下例所示。</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut errors: Vec&lt;String&gt; = vec![];
+errors.push("something went wrong".to_string());
+errors.push(format!("something went wrong on line {}", 100));
+<span class="boring">}</span></code></pre></pre>
+<p>这需要一个 <code>to_string</code> 调用来将静态字符串字面量提升为 <code>String</code>，这会产生一次分配。</p>
+<p>相反，您可以使用 <a href="https://doc.rust-lang.org/std/borrow/enum.Cow.html"><code>Cow</code></a> 类型，它可以保存借用或拥有的数据。借用值 <code>x</code> 被包装在 <code>Cow::Borrowed(x)</code> 中，拥有值 <code>y</code> 被包装在 <code>Cow::Owned(y)</code> 中。<code>Cow</code> 还为各种字符串、切片和路径类型实现了 <code>From&lt;T&gt;</code> trait，因此通常也可以使用 <code>into</code>。 （或者 <code>Cow::from</code>，这更长一些，但会产生更易读的代码，因为它使类型更清晰。）以下示例将所有这些内容整合在一起。</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::borrow::Cow;
+let mut errors: Vec&lt;Cow&lt;'static, str&gt;&gt; = vec![];
+errors.push(Cow::Borrowed("something went wrong"));
+errors.push(Cow::Owned(format!("something went wrong on line {}", 100)));
+errors.push(Cow::from("something else went wrong"));
+errors.push(format!("something else went wrong on line {}", 101).into());
+<span class="boring">}</span></code></pre></pre>
+<p>现在，<code>errors</code> 包含了借用和拥有数据的混合，而无需进行任何额外的分配。这个示例涉及 <code>&amp;str</code>/<code>String</code>，但其他配对，如 <code>&amp;[T]</code>/<code>Vec&lt;T&gt;</code> 和 <code>&amp;Path</code>/<code>PathBuf</code> 也是可能的。</p>
+<p><a href="https://github.com/rust-lang/rust/pull/37064/commits/b043e11de2eb2c60f7bfec5e15960f537b229e20"><strong>Example 1</strong></a>,
+<a href="https://github.com/rust-lang/rust/pull/56336/commits/787959c20d062d396b97a5566e0a766d963af022"><strong>Example 2</strong></a>.</p>
+<p>以上所有内容适用于数据是不可变的情况。但是，<code>Cow</code> 也允许将借用数据提升为拥有数据，如果需要对其进行修改。<a href="https://doc.rust-lang.org/std/borrow/enum.Cow.html#method.to_mut"><code>Cow::to_mut</code></a> 将获得一个可变引用到一个拥有值，必要时进行克隆。这就是所谓的“写时复制”，也是 <code>Cow</code> 名称的由来。</p>
 <h2 id="reusing-collections"><a class="header" href="#reusing-collections">Reusing Collections</a></h2>
 <p>有时你需要分阶段建立一个集合，如<code>Vec</code>。通常情况下，通过修改一个<code>Vec</code>比建立多个<code>Vec</code>然后将它们组合起来更好。</p>
 <p>例如，如果你有一个函数 “do_stuff”，产生一个 “Vec”，可能会被多次调用。</p>
@@ -289,16 +312,43 @@ assert_eq!(v1.capacity(), 99);
 <a href="https://github.com/rust-lang/rust/pull/77990/commits/45faeb43aecdc98c9e3f2b24edf2ecc71f39d323"><strong>Example 1</strong></a>,
 <a href="https://github.com/rust-lang/rust/pull/51870/commits/b0c78120e3ecae5f4043781f7a3f79e2277293e7"><strong>Example 2</strong></a>.</p>
 <p>同样，有时值得在一个结构中保留一个 “主力 “集合，以便在一个或多个被重复调用的方法中重用。</p>
-<h2 id="使用其他分配器"><a class="header" href="#使用其他分配器">使用其他分配器</a></h2>
-<p>另一个提高分配量大的Rust程序性能的选择是用一个替代分配器代替默认的（系统）分配器。确切的效果将取决于单个程序和选择的替代分配器。在不同的平台上，它也会有所不同，因为每个平台的系统分配器都有自己的优势和弱点。使用替代分配器也会影响二进制大小。</p>
-<p>一个流行的替代分配器是<a href="https://github.com/jemalloc/jemalloc">jemalloc</a>，可通过 <a href="https://crates.io/crates/jemallocator"><code>jemallocator</code></a>箱子。要使用它，请在你的<code>Cargo.toml</code>文件中添加一个依赖关系。</p>
-<pre><code class="language-toml">[dependencies]
-jemallocator = "0.3.2"
-</code></pre>
-<p>然后在你的Rust代码中添加以下内容。</p>
-<pre><code class="language-rust ignore">#[global_allocator]
-static GLOBAL: jemallocator::Jemalloc = jemallocator::Jemalloc;</code></pre>
-<p>另一个可供选择的分配器是<a href="https://github.com/microsoft/mimalloc">mimalloc</a>，可通过<a href="https://docs.rs/mimalloc/0.1.22/mimalloc/"><code>mimalloc</code></a>板房使用。</p>
+<h2 id="从文件中逐行读取"><a class="header" href="#从文件中逐行读取">从文件中逐行读取</a></h2>
+<p><a href="https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.lines"><code>BufRead::lines</code></a> 使得逐行读取文件变得很容易：</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn blah() -&gt; Result&lt;(), std::io::Error&gt; {
+</span><span class="boring">fn process(_: &amp;str) {}
+</span>use std::io::{self, BufRead};
+let mut lock = io::stdin().lock();
+for line in lock.lines() {
+    process(&amp;line?);
+}
+<span class="boring">Ok(())
+</span><span class="boring">}
+</span><span class="boring">}</span></code></pre></pre>
+<p>但它生成的迭代器返回的是 <code>io::Result&lt;String&gt;</code>，这意味着它为文件中的每一行分配内存。</p>
+<p>另一种方法是在循环中使用一个工作用的 <code>String</code>，通过 <a href="https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.read_line"><code>BufRead::read_line</code></a>：</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn blah() -&gt; Result&lt;(), std::io::Error&gt; {
+</span><span class="boring">fn process(_: &amp;str) {}
+</span>use std::io::{self, BufRead};
+let mut lock = io::stdin().lock();
+let mut line = String::new();
+while lock.read_line(&amp;mut line)? != 0 {
+    process(&amp;line);
+    line.clear();
+}
+<span class="boring">Ok(())
+</span><span class="boring">}
+</span><span class="boring">}</span></code></pre></pre>
+<p>这样可以将分配的次数降至最多几次，甚至可能只有一次。（确切的次数取决于需要多少次重新分配 <code>line</code>，这取决于文件中行长度的分布情况。）</p>
+<p>这种方法只适用于循环体能够操作 <code>&amp;str</code> 而不是 <code>String</code> 的情况。</p>
+<p><a href="https://github.com/nnethercote/counts/commit/7d39bbb1867720ef3b9799fee739cd717ad1539a"><strong>Example</strong></a>.</p>
+<h2 id="使用不同的分配器"><a class="header" href="#使用不同的分配器">使用不同的分配器</a></h2>
+<p>除了更改代码外，还可以通过使用不同的分配器来改善堆分配性能。请参阅 <a href="build-configuration.html#alternative-allocators_zh">Alternative Allocators</a> 部分获取详细信息。</p>
+<h2 id="避免回归"><a class="header" href="#避免回归">避免回归</a></h2>
+<p>为了确保代码执行时的分配次数和/或大小不会意外增加，您可以使用 <a href="https://crates.io/crates/dhat">dhat-rs</a> 的 <em>堆使用测试</em> 功能编写测试，检查特定代码段分配了预期量的堆内存。</p>
 
                     </main>
 

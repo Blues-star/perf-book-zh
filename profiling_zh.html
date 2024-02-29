@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html" class="active"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">12.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">13.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">14.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">15.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">16.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">17.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">18.</strong> 编译时间</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html" class="active"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="bounds-checks_zh.html"><strong aria-hidden="true">12.</strong> 边界检查</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">13.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">14.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">15.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">16.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">17.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">18.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">19.</strong> 编译时间</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -179,26 +179,46 @@
                         <h1 id="profiling"><a class="header" href="#profiling">Profiling</a></h1>
 <p>在优化程序时，你还需要一种方法来确定程序的哪些部分是 “热 “的（执行频率足以影响运行时间），值得修改。这一点最好通过Profiling来完成。</p>
 <h2 id="profilers"><a class="header" href="#profilers">Profilers</a></h2>
-<p>有许多不同的Profilers，每个Profilers都有自己的优点和缺点。下面是一个不完整的列表，其中列出了已经成功用于Rust程序的Profilers。</p>
+<p>有许多不同的性能分析工具可供选择，每种工具都有其优势和劣势。以下是一份未完整的性能分析工具列表，这些工具已成功用于 Rust 程序。</p>
 <ul>
-<li><a href="https://perf.wiki.kernel.org/index.php/Main_Page">perf</a>是一个使用硬件性能计数器的通用剖析器。<a href="https://github.com/KDAB/hotspot">Hotspot</a>和<a href="https://profiler.firefox.com/">Firefox Profiler</a>是查看perf记录的数据的好工具。</li>
-<li><a href="https://www.valgrind.org/docs/manual/cg-manual.html">Cachegrind</a>和<a href="https://www.valgrind.org/docs/manual/cl-manual.html">Callgrind</a>给出了全局的、每个函数的、每个源线的指令数以及模拟的缓存和分支预测数据。</li>
-<li><a href="https://www.valgrind.org/docs/manual/dh-manual.html">DHAT</a>可以很好的找到代码中哪些部分会造成大量的分配，并对峰值内存使用情况进行深入了解。<a href="https://github.com/KDE/heaptrack">heaptrack</a>是另一个堆分析工具。</li>
-<li><a href="https://github.com/nnethercote/counts/"><code>counts</code></a>支持特别剖析，它将<code>eprintln！</code>语句的使用与基于频率的后处理结合起来，这对于了解代码中特定领域的部分内容很有帮助。</li>
-<li><a href="https://github.com/plasma-umass/coz">Coz</a>执行<em>因果分析</em>以衡量优化潜力。它通过<a href="https://github.com/plasma-umass/coz/tree/master/rust">coz-rs</a>支持Rust。</li>
-<li><a href="https://github.com/flamegraph-rs/flamegraph">flamegraph</a>是一个Cargo命令，它使用<code>perf</code>/<code>DTrace</code>对你的代码进行剖析，然后用火焰图显示结果。</li>
+<li><a href="https://perf.wiki.kernel.org/index.php/Main_Page">perf</a> 是一个使用硬件性能计数器的通用性能分析工具。<a href="https://github.com/KDAB/hotspot">Hotspot</a> 和 <a href="https://profiler.firefox.com/">Firefox Profiler</a> 适用于查看 perf 记录的数据。它适用于 Linux。</li>
+<li>[Instruments] 是一个随 macOS 上的 Xcode 提供的通用性能分析工具。</li>
+<li>[Intel VTune Profiler] 是一个通用性能分析工具。它适用于 Windows、Linux 和 macOS。</li>
+<li>[AMD μProf] 是一个通用性能分析工具。它适用于 Windows 和 Linux。</li>
+<li>[samply] 是一个采样性能分析工具，生成的分析结果可以在 Firefox Profiler 中查看。它适用于 Mac 和 Linux。</li>
+<li><a href="https://github.com/flamegraph-rs/flamegraph">flamegraph</a> 是一个 Cargo 命令，使用 perf/DTrace 对代码进行性能分析，然后在火焰图中显示结果。它适用于 Linux 和支持 DTrace 的所有平台（macOS、FreeBSD、NetBSD，可能还包括 Windows）。</li>
+<li><a href="https://www.valgrind.org/docs/manual/cg-manual.html">Cachegrind</a> 和 <a href="https://www.valgrind.org/docs/manual/cl-manual.html">Callgrind</a> 提供全局、每个函数和每个源代码行的指令计数以及模拟缓存和分支预测数据。它们适用于 Linux 和其他一些 Unix 系统。</li>
+<li><a href="https://www.valgrind.org/docs/manual/dh-manual.html">DHAT</a> 适用于找出代码中导致大量分配的部分，并提供有关峰值内存使用情况的见解。它还可以用于识别对 <code>memcpy</code> 的热调用。它适用于 Linux 和其他一些 Unix 系统。[dhat-rs] 是一个实验性的替代方案，功能稍弱，需要对 Rust 程序进行轻微更改，但适用于所有平台。</li>
+<li><a href="https://github.com/KDE/heaptrack">heaptrack</a> 和 [bytehound] 是堆分析工具。它们适用于 Linux。</li>
+<li><a href="https://github.com/nnethercote/counts/"><code>counts</code></a> 支持临时性能分析，结合 <code>eprintln!</code> 语句和基于频率的后处理，适用于获取代码部分的领域特定见解。它适用于所有平台。</li>
+<li><a href="https://github.com/plasma-umass/coz">Coz</a> 执行<em>因果分析</em>以测量优化潜力，并通过 <a href="https://github.com/plasma-umass/coz/tree/master/rust">coz-rs</a> 支持 Rust。它适用于 Linux。</li>
+<li></li>
 </ul>
-<h2 id="调试信息"><a class="header" href="#调试信息">调试信息</a></h2>
-<p>为了有效地描述一个发布版本的构建，你可能需要启用源代码行调试信息。要做到这一点，请在你的 <code>Cargo.toml</code>文件中添加以下行。</p>
+<p>为了有效地对发布版本进行性能分析，你可能需要启用源代码行调试信息。要做到这一点，在你的 <code>Cargo.toml</code> 文件中添加以下行：</p>
 <pre><code class="language-toml">[profile.release]
 debug = 1
 </code></pre>
-<p>关于 “debug “设置的更多细节，请参见[Cargo文档]。</p>
+<p>查看 <a href="https://doc.rust-lang.org/cargo/reference/profiles.html#debug">Cargo 文档</a> 以获取有关 <code>debug</code> 设置的更多详细信息。</p>
+<p>不幸的是，即使执行了上述步骤，你也无法获得标准库代码的详细性能分析信息。这是因为 Rust 标准库的发布版本未使用调试信息构建。</p>
+<p>最可靠的解决方法是构建自己的编译器和标准库版本，遵循 <a href="https://github.com/rust-lang/rust">这些说明</a>，并在 <code>config.toml</code> 文件中添加以下行：</p>
+<pre><code class="language-toml">[rust]
+debuginfo-level = 1
+</code></pre>
+<p>这可能有些麻烦，但在某些情况下值得努力。</p>
+<p>另外，不稳定的 <a href="https://doc.rust-lang.org/cargo/reference/unstable.html#build-std">build-std</a> 功能允许你将标准库作为程序正常编译的一部分进行编译，使用相同的构建配置。然而，标准库调试信息中存在的文件名将不指向源代码文件，因为此功能不会下载标准库源代码。因此，这种方法对于像 Cachegrind 和 Samply 这样需要源代码才能完全工作的性能分析工具并不适用。</p>
 <h2 id="symbol-demangling"><a class="header" href="#symbol-demangling">Symbol Demangling</a></h2>
 <p>Rust在编译代码中使用了一个杂乱的方案来编码函数名。如果一个剖析器不知道这个方案，它的输出可能会包含像这样的符号名
 <code>_ZN3foo3barE</code>或<code>_ZN28_$u7b$$u7b$closure$u7d$$u7d$E</code>或<code>_ZN28_$u7b$$$u7d$E</code>或
 <code>_ZN88_$LT$core.result.Result$LT$$u21$$C$$u20$E$GT$u20$as$u20$std.process.Termination$GT$6report17hfc41d0da4a40b3e8E</code>。
 像这样的名字，可以用<a href="https://crates.io/crates/rustfilt"><code>rustfilt</code></a>手动拆分。</p>
+<p>如果在进行性能分析时遇到符号解缠混淆的问题，可能值得将 <a href="https://doc.rust-lang.org/rustc/codegen-options/index.html#symbol-mangling-version">编码格式</a> 从默认的传统格式更改为更新的 v0 格式。</p>
+<p>要从命令行中使用 v0 格式，可以使用 <code>-C symbol-mangling-version=v0</code> 标志。例如：</p>
+<pre><code class="language-bash">RUSTFLAGS="-C symbol-mangling-version=v0" cargo build --release
+</code></pre>
+<p>另外，要从 <a href="https://doc.rust-lang.org/cargo/reference/config.html"><code>config.toml</code></a> 文件（针对一个或多个项目）请求这些说明，添加以下行：</p>
+<pre><code class="language-toml">[build]
+rustflags = ["-C", "symbol-mangling-version=v0"]
+</code></pre>
 
                     </main>
 

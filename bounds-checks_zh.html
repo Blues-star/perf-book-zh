@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>哈希 - The Rust Performance Book</title>
+        <title>边界检查 - The Rust Performance Book</title>
 
 
         <!-- Custom HTML head -->
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html" class="active"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="bounds-checks_zh.html"><strong aria-hidden="true">12.</strong> 边界检查</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">13.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">14.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">15.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">16.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">17.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">18.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">19.</strong> 编译时间</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="bounds-checks_zh.html" class="active"><strong aria-hidden="true">12.</strong> 边界检查</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">13.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">14.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">15.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">16.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">17.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">18.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">19.</strong> 编译时间</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -176,33 +176,28 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="哈希"><a class="header" href="#哈希">哈希</a></h1>
-<p><code>HashSet</code> 和 <code>HashMap</code> 是两种广泛使用的类型。默认的哈希算法没有指定，但在撰写本文时，默认算法是一种称为 <a href="https://en.wikipedia.org/wiki/SipHash">SipHash 1-3</a> 的算法。这个算法质量很高——它提供了很高的碰撞保护，但对于短键（如整数）来说相对较慢。</p>
-<p>如果测试显示hash是关键部分，而<a href="https://en.wikipedia.org/wiki/Collision_attack">HashDoS attacks</a>并不是你的应用所关心的问题，那么使用具有更快的散列算法的散列表可以提供很大的速度优势。</p>
+                        <h1 id="bounds-checks"><a class="header" href="#bounds-checks">Bounds Checks</a></h1>
+<p>默认情况下，在 Rust 中，对切片和向量等容器类型的访问涉及边界检查。这可能会影响性能，例如在热循环中，尽管发生的频率可能不如您所预期的那样频繁。</p>
+<p>有几种安全的方法可以更改代码，以便编译器了解容器的长度并优化掉边界检查。</p>
 <ul>
-<li><a href="https://crates.io/crates/rustc-hash"><code>rustc-hash</code></a>提供了 “FxHashSet “和 “FxHashMap “类型，它们是 “HashSet “和 “HashMap “的替代物。它的散列算法质量不高，但速度非常快，特别是对整数键而言，并且发现它的性能优于rustc内的所有其他散列算法。</li>
-<li><a href="https://crates.io/crates/fnv"><code>fnv</code></a>提供了<code>FnvHashSet</code>和<code>FnvHashMap</code>类型。其散列算法比<code>fxhash</code>的质量高，但速度稍慢。</li>
-<li><a href="https://crates.io/crates/ahash"><code>ahash</code></a>提供<code>AHashSet</code>和<code>AHashMap</code>。它的哈希算法可以采取一些处理器上的AES指令支持的优势。</li>
+<li>在循环中，通过迭代替换直接元素访问。</li>
+<li>在循环中，不要对 Vec 进行索引，而是在循环之前创建 Vec 的切片，然后在循环中对切片进行索引。</li>
+<li>在索引变量的范围上添加断言。
+<a href="https://github.com/rust-random/rand/pull/960/commits/de9dfdd86851032d942eb583d8d438e06085867b"><strong>Example 1</strong></a>,
+<a href="https://github.com/image-rs/jpeg-decoder/pull/167/files"><strong>Example 2</strong></a>.</li>
 </ul>
-<p>如果散列性能在你的程序中很重要，那么值得尝试以上几种选择。例如，在rustc中看到以下结果。</p>
-<ul>
-<li>从 <code>fnv</code>切换到 <code>rustc-hash</code> 的结果是<a href="https://github.com/rust-lang/rust/pull/37229/commits/00e48affde2d349e3b3bfbd3d0f6afb5d76282a7">速度提高了6%</a>。</li>
-<li>试图从<code>rustc-hash</code>切换到<code>ahash</code>的结果是<a href="https://github.com/rust-lang/rust/issues/69153#issuecomment-589504301">减速1-4%</a>。</li>
-<li>试图从<code>rustc-hash</code>切换回默认的哈希，结果是<a href="https://github.com/rust-lang/rust/issues/69153#issuecomment-589338446">速度减慢了4-84%</a>!</li>
-</ul>
-<p>如果您决定普遍使用替代方案之一，比如 <code>FxHashSet</code>/<code>FxHashMap</code>，很容易在某些地方意外地使用 <code>HashSet</code>/<code>HashMap</code>。您可以使用 <a href="linting.html#disallowing-types">Clippy</a> 来避免这个问题。</p>
-<p>有些类型不需要哈希。例如，您可能有一个包装整数的新类型，而整数值是随机的，或者接近随机的。对于这种类型，哈希值的分布与值本身的分布并没有太大不同。在这种情况下，<a href="https://crates.io/crates/nohash-hasher"><code>nohash_hasher</code></a> crate 可能会有用。</p>
-<p>哈希函数设计是一个复杂的主题，超出了本书的范围。<a href="https://github.com/tkaitchuck/aHash/blob/master/compare/readme.md"><code>ahash</code> 文档</a> 中有很好的讨论。</p>
+<p>让这些方法起作用可能有些棘手。<a href="https://github.com/Shnatsel/bounds-check-cookbook/">Bounds Check Cookbook</a>对这个主题进行了更详细的介绍</p>
+<p>作为最后的手段，还有不安全的方法 [get_unchecked] 和 [get_unchecked_mut]。</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="inlining_zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="iterators_zh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="heap-allocations_zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="io_zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -212,11 +207,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="inlining_zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="iterators_zh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="heap-allocations_zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="io_zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

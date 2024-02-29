@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html" class="active"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">12.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">13.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">14.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">15.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">16.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">17.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">18.</strong> 编译时间</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html" class="active"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="bounds-checks_zh.html"><strong aria-hidden="true">12.</strong> 边界检查</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">13.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">14.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">15.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">16.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">17.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">18.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">19.</strong> 编译时间</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -182,10 +182,22 @@
 <p>出于这个原因，从函数中返回一个迭代器类型，比如<code>impl Iterator&lt;Item=T&gt;</code>，往往比<code>Vec&lt;T&gt;</code>更好。请注意，有时这些返回类型需要额外的生存期，正如<a href="https://blog.katona.me/2019/12/29/Rust-Lifetimes-and-Iterators/">this post</a>所解释的那样。
 <a href="https://github.com/rust-lang/rust/pull/77990/commits/660d8a6550a126797aa66a417137e39a5639451b"><strong>Example</strong></a>.</p>
 <p>同样，你可以使用<a href="https://doc.rust-lang.org/std/iter/trait.Extend.html#tymethod.extend"><code>extend</code></a>用迭代器扩展一个现有的集合（如<code>Vec</code>），而不是将迭代器收集到<code>Vec</code>中，然后使用<a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.append"><code>append</code></a>。</p>
+<p>最后，当编写迭代器时，如果可能的话，实现 <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.size_hint"><code>Iterator::size_hint</code></a> 或 <a href="https://doc.rust-lang.org/std/iter/trait.ExactSizeIterator.html#method.len"><code>ExactSizeIterator::len</code></a> 方法通常是值得的。使用该迭代器的 <code>collect</code> 和 <code>extend</code> 调用可能会减少分配，因为它们提前了解迭代器产生的元素数量信息。</p>
 <h2 id="chaining"><a class="header" href="#chaining">Chaining</a></h2>
 <p><a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.chain"><code>chain</code></a>可以非常方便，但也可能比单个迭代器慢。如果可能的话，热迭代器可能值得避免。
 <a href="https://github.com/rust-lang/rust/pull/64801/commits/5ca99b750e455e9b5e13e83d0d7886486231e48a"><strong>Example</strong></a>.</p>
 <p>类似地，<a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.filter_map"><code>filter_map</code></a>可能比使用<a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.filter"><code>filter</code></a>和<a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.map"><code>map</code></a>更快。</p>
+<h2 id="chunks"><a class="header" href="#chunks">Chunks</a></h2>
+<p>当需要一个分块迭代器，并且已知分块大小恰好能整除切片长度时，应该使用更快的 <a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.chunks_exact"><code>slice::chunks_exact</code></a> 而不是 <a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.chunks"><code>slice::chunks</code></a>。</p>
+<p>当分块大小不确定能否恰好整除切片长度时，仍然可以更快地使用 <code>slice::chunks_exact</code>，结合 <a href="https://doc.rust-lang.org/stable/std/slice/struct.ChunksExact.html#method.remainder"><code>ChunksExact::remainder</code></a> 或手动处理多余元素。
+<a href="https://github.com/johannesvollmer/exrs/pull/173/files"><strong>Example 1</strong></a>,
+<a href="https://github.com/johannesvollmer/exrs/pull/175/files"><strong>Example 2</strong></a>.</p>
+<p>同样适用于相关的迭代器:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.rchunks"><code>slice::rchunks</code></a>, <a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.rchunks_exact"><code>slice::rchunks_exact</code></a>, and <a href="https://doc.rust-lang.org/stable/std/slice/struct.RChunksExact.html#method.remainder"><code>RChunksExact::remainder</code></a>;</li>
+<li><a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.chunks_mut"><code>slice::chunks_mut</code></a>, <a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.chunks_exact_mut"><code>slice::chunks_exact_mut</code></a>, and <a href="https://doc.rust-lang.org/stable/std/slice/struct.ChunksExactMut.html#method.into_remainder"><code>ChunksExactMut::into_remainder</code></a>;</li>
+<li><a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.rchunks_mut"><code>slice::rchunks_mut</code></a>, <a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.rchunks_exact_mut"><code>slice::rchunks_exact_mut</code></a>, and <a href="https://doc.rust-lang.org/stable/std/slice/struct.RChunksExactMut.html#method.into_remainder"><code>RChunksExactMut::into_remainder</code></a>.</li>
+</ul>
 
                     </main>
 
@@ -195,7 +207,7 @@
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="io_zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="bounds-checks_zh.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -209,7 +221,7 @@
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="io_zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="bounds-checks_zh.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

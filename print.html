@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">12.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">13.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">14.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">15.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">16.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">17.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">18.</strong> 编译时间</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Title Page</a></li><li class="chapter-item expanded "><a href="introduction_zh.html"><strong aria-hidden="true">1.</strong> 简介</a></li><li class="chapter-item expanded "><a href="benchmarking_zh.html"><strong aria-hidden="true">2.</strong> 基准分析</a></li><li class="chapter-item expanded "><a href="build-configuration_zh.html"><strong aria-hidden="true">3.</strong> 构建配置</a></li><li class="chapter-item expanded "><a href="linting_zh.html"><strong aria-hidden="true">4.</strong> Linting</a></li><li class="chapter-item expanded "><a href="profiling_zh.html"><strong aria-hidden="true">5.</strong> Profiling</a></li><li class="chapter-item expanded "><a href="inlining_zh.html"><strong aria-hidden="true">6.</strong> 初始化</a></li><li class="chapter-item expanded "><a href="hashing_zh.html"><strong aria-hidden="true">7.</strong> 哈希</a></li><li class="chapter-item expanded "><a href="heap-allocations_zh.html"><strong aria-hidden="true">8.</strong> 堆分配</a></li><li class="chapter-item expanded "><a href="type-sizes_zh.html"><strong aria-hidden="true">9.</strong> 类型大小</a></li><li class="chapter-item expanded "><a href="standard-library-types_zh.html"><strong aria-hidden="true">10.</strong> 标准库类型</a></li><li class="chapter-item expanded "><a href="iterators_zh.html"><strong aria-hidden="true">11.</strong> 迭代器</a></li><li class="chapter-item expanded "><a href="bounds-checks_zh.html"><strong aria-hidden="true">12.</strong> 边界检查</a></li><li class="chapter-item expanded "><a href="io_zh.html"><strong aria-hidden="true">13.</strong> I/O</a></li><li class="chapter-item expanded "><a href="logging-and-debugging_zh.html"><strong aria-hidden="true">14.</strong> 日志和调试</a></li><li class="chapter-item expanded "><a href="wrapper-types_zh.html"><strong aria-hidden="true">15.</strong> 封装类型</a></li><li class="chapter-item expanded "><a href="machine-code_zh.html"><strong aria-hidden="true">16.</strong> 机器码</a></li><li class="chapter-item expanded "><a href="parallelism_zh.html"><strong aria-hidden="true">17.</strong> 并行</a></li><li class="chapter-item expanded "><a href="general-tips_zh.html"><strong aria-hidden="true">18.</strong> 一般提示</a></li><li class="chapter-item expanded "><a href="compile-times_zh.html"><strong aria-hidden="true">19.</strong> 编译时间</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -177,16 +177,17 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="rust性能手册"><a class="header" href="#rust性能手册"><span style="font-size: 150%">RUST性能手册</span></a></h1>
+                        <h1 id="rust性能手册"><a class="header" href="#rust性能手册"><span style="font-size: 150%"># RUST性能手册</span></a></h1>
 <p><strong><span style="font-size: 130%">First published in November 2020</span></strong></p>
 <p><strong><span style="font-size: 130%">Written by Nicholas Nethercote and others</span></strong></p>
 <p><strong>Chinese translated by Blues-star</strong></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="简介"><a class="header" href="#简介">简介</a></h1>
 <p>性能对许多Rust程序来说都很重要。</p>
-<p>本书包含了许多可以提高Rust程序的性能-速度和内存使用率的技术，其中<a href="compile-times.html">编译时间</a>部分也包含了一些可以提高Rust程序编译时间的技术。编译时间]部分也包含了一些可以改善Rust程序编译时间的技术。本书的一些技术只需要改变构建配置，但许多技术需要改变代码。</p>
-<p>其中的一些技术完全是 Rust 所特有的，而一些涉及的想法可以应用（通常经过修改）到其他语言编写的程序中。<a href="general-tips.html">General Tips</a>部分还包括一些适用于任何编程语言的一般原则。尽管如此，本书主要是关于Rust程序的性能，并不能替代通用的剖析和优化指南。</p>
-<p>本书还重点介绍了那些实用的、经过验证的技术：许多技术都附有拉请求或其他资源的链接，展示了该技术是如何在真实世界的Rust程序上使用的。</p>
-<p>本书针对的是中级和高级Rust用户。初级Rust用户需要学习的东西已经够多了，这些技术很可能会对他们造成无益的干扰。</p>
+<p>本书包含了许多可以提高Rust程序的性能-速度和内存使用率的技术，其中<a href="compile-times_zh.html">编译时间</a>部分也包含了一些可以提高Rust程序编译时间的技术。编译时间]部分也包含了一些可以改善Rust程序编译时间的技术。本书的一些技术只需要改变构建配置，但许多技术需要改变代码。</p>
+<p>一些技术完全是 Rust 特有的，而一些涉及的思想可以应用于其他编程语言编写的程序（通常需要进行修改）。<a href="general-tips_zh.html">General Tips</a> 部分还包括适用于任何编程语言的一些一般原则。尽管如此，这本书主要关注 Rust 程序的性能，不能替代一本关于分析和优化的通用指南。</p>
+<p>本书侧重于实用且经过验证的技术：许多技术都附有指向拉取请求或其他资源的链接，展示了这些技术在真实的 Rust 程序中的应用。这反映了主要作者的背景，有点偏向编译器开发，而不太涉及其他领域，如科学计算。</p>
+<p>本书有意简洁，更注重广度而非深度，使其阅读起来迅速。在适当的情况下，它会链接到提供更深入信息的外部资源。</p>
+<p>本书面向中级和高级 Rust 用户。初学者 Rust 用户有很多东西要学习，这些技术可能会对他们造成不必要的干扰。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="benchmarking"><a class="header" href="#benchmarking">Benchmarking</a></h1>
 <p>基准测试通常涉及比较执行相同任务的两个或多个程序的性能。有时可能涉及比较两个或多个不同的程序，例如 <code>Firefox</code> vs <code>Safari</code> vs <code>Chrome</code>。有时涉及比较同一程序的两个不同版本。后一种情况让我们能够可靠地回答问题“这个变化是否加快了速度？”</p>
 <p>基准测试是一个复杂的主题，全面覆盖超出了本书的范围，但以下是基础知识。</p>
@@ -359,44 +360,74 @@ codegen-backend = "cranelift"
 <div style="break-before: page; page-break-before: always;"></div><h1 id="linting"><a class="header" href="#linting">Linting</a></h1>
 <p>[Clippy]是一个用来捕捉Rust代码中常见错误的lints集合。它是运行在Rust代码上的一个优秀工具。它还可以帮助提高性能，因为许多lints与可能导致次优性能的代码模式有关。
 [Clippy]: https://github.com/rust-lang/rust-clippy</p>
-<p>安装后，很容易运行它</p>
+<p>鉴于自动检测问题优于手动检测问题，本书的其余部分将不会提及 Clippy 默认检测到的性能问题。</p>
+<h2 id="基础"><a class="header" href="#基础">基础</a></h2>
+<p>Clippy 是一个 Rust 的 lint 工具，用于静态代码分析。安装后，可以通过以下命令轻松运行：</p>
 <pre><code class="language-text">cargo clippy
 </code></pre>
-<p>通过访问<a href="https://rust-lang.github.io/rust-clippy/master/">lint list</a>并取消选择除 “Perf “以外的所有lints组，可以看到完整的性能lints列表。</p>
-<p>除了让代码更快之外，性能上的lint建议通常会让代码更简单、更习惯，所以即使是不热门的代码也值得遵循。</p>
+<p>可以通过访问 [lint list] 并取消选择除了 “Perf” 之外的所有 lint 组，查看完整的性能 lint 列表。</p>
+<p>除了使代码更快之外，性能 lint 建议通常会导致更简单、更符合惯例的代码，因此即使对于不经常执行的代码，也值得遵循这些建议。</p>
+<p>相反，一些非性能 lint 建议可能会提高性能。例如，<a href="https://rust-lang.github.io/rust-clippy/master/index.html#ptr_arg"><code>ptr_arg</code></a> 风格 lint 建议将各种容器参数更改为切片，例如将 <code>&amp;mut Vec&lt;T&gt;</code> 参数更改为 <code>&amp;mut [T]</code>。这里的主要动机是切片提供了更灵活的 API，但也可能由于减少间接性和为编译器提供更好的优化机会而导致更快的代码。
+<a href="https://github.com/fschutt/fastblur/pull/3/files"><strong>Example</strong></a>.</p>
+<h2 id="disallowing-types"><a class="header" href="#disallowing-types">Disallowing Types</a></h2>
+<p>在接下来的章节中，我们将看到有时候值得避免使用某些标准库类型，而选择更快的替代方案。如果你决定使用这些替代方案，很容易在某些地方意外地错误使用标准库类型。</p>
+<p>你可以使用 Clippy 的 <a href="https://rust-lang.github.io/rust-clippy/master/index.html#disallowed_types"><code>disallowed_types</code></a> lint 来避免这个问题。例如，为了禁止使用标准哈希表（原因在 <a href="hashing.html">Hashing</a> 部分有解释），可以在你的代码中添加一个 <code>clippy.toml</code> 文件，并包含以下行。</p>
+<pre><code class="language-toml">disallowed-types = ["std::collections::HashMap", "std::collections::HashSet"]
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="profiling"><a class="header" href="#profiling">Profiling</a></h1>
 <p>在优化程序时，你还需要一种方法来确定程序的哪些部分是 “热 “的（执行频率足以影响运行时间），值得修改。这一点最好通过Profiling来完成。</p>
 <h2 id="profilers"><a class="header" href="#profilers">Profilers</a></h2>
-<p>有许多不同的Profilers，每个Profilers都有自己的优点和缺点。下面是一个不完整的列表，其中列出了已经成功用于Rust程序的Profilers。</p>
+<p>有许多不同的性能分析工具可供选择，每种工具都有其优势和劣势。以下是一份未完整的性能分析工具列表，这些工具已成功用于 Rust 程序。</p>
 <ul>
-<li><a href="https://perf.wiki.kernel.org/index.php/Main_Page">perf</a>是一个使用硬件性能计数器的通用剖析器。<a href="https://github.com/KDAB/hotspot">Hotspot</a>和<a href="https://profiler.firefox.com/">Firefox Profiler</a>是查看perf记录的数据的好工具。</li>
-<li><a href="https://www.valgrind.org/docs/manual/cg-manual.html">Cachegrind</a>和<a href="https://www.valgrind.org/docs/manual/cl-manual.html">Callgrind</a>给出了全局的、每个函数的、每个源线的指令数以及模拟的缓存和分支预测数据。</li>
-<li><a href="https://www.valgrind.org/docs/manual/dh-manual.html">DHAT</a>可以很好的找到代码中哪些部分会造成大量的分配，并对峰值内存使用情况进行深入了解。<a href="https://github.com/KDE/heaptrack">heaptrack</a>是另一个堆分析工具。</li>
-<li><a href="https://github.com/nnethercote/counts/"><code>counts</code></a>支持特别剖析，它将<code>eprintln！</code>语句的使用与基于频率的后处理结合起来，这对于了解代码中特定领域的部分内容很有帮助。</li>
-<li><a href="https://github.com/plasma-umass/coz">Coz</a>执行<em>因果分析</em>以衡量优化潜力。它通过<a href="https://github.com/plasma-umass/coz/tree/master/rust">coz-rs</a>支持Rust。</li>
-<li><a href="https://github.com/flamegraph-rs/flamegraph">flamegraph</a>是一个Cargo命令，它使用<code>perf</code>/<code>DTrace</code>对你的代码进行剖析，然后用火焰图显示结果。</li>
+<li><a href="https://perf.wiki.kernel.org/index.php/Main_Page">perf</a> 是一个使用硬件性能计数器的通用性能分析工具。<a href="https://github.com/KDAB/hotspot">Hotspot</a> 和 <a href="https://profiler.firefox.com/">Firefox Profiler</a> 适用于查看 perf 记录的数据。它适用于 Linux。</li>
+<li>[Instruments] 是一个随 macOS 上的 Xcode 提供的通用性能分析工具。</li>
+<li>[Intel VTune Profiler] 是一个通用性能分析工具。它适用于 Windows、Linux 和 macOS。</li>
+<li>[AMD μProf] 是一个通用性能分析工具。它适用于 Windows 和 Linux。</li>
+<li>[samply] 是一个采样性能分析工具，生成的分析结果可以在 Firefox Profiler 中查看。它适用于 Mac 和 Linux。</li>
+<li><a href="https://github.com/flamegraph-rs/flamegraph">flamegraph</a> 是一个 Cargo 命令，使用 perf/DTrace 对代码进行性能分析，然后在火焰图中显示结果。它适用于 Linux 和支持 DTrace 的所有平台（macOS、FreeBSD、NetBSD，可能还包括 Windows）。</li>
+<li><a href="https://www.valgrind.org/docs/manual/cg-manual.html">Cachegrind</a> 和 <a href="https://www.valgrind.org/docs/manual/cl-manual.html">Callgrind</a> 提供全局、每个函数和每个源代码行的指令计数以及模拟缓存和分支预测数据。它们适用于 Linux 和其他一些 Unix 系统。</li>
+<li><a href="https://www.valgrind.org/docs/manual/dh-manual.html">DHAT</a> 适用于找出代码中导致大量分配的部分，并提供有关峰值内存使用情况的见解。它还可以用于识别对 <code>memcpy</code> 的热调用。它适用于 Linux 和其他一些 Unix 系统。[dhat-rs] 是一个实验性的替代方案，功能稍弱，需要对 Rust 程序进行轻微更改，但适用于所有平台。</li>
+<li><a href="https://github.com/KDE/heaptrack">heaptrack</a> 和 [bytehound] 是堆分析工具。它们适用于 Linux。</li>
+<li><a href="https://github.com/nnethercote/counts/"><code>counts</code></a> 支持临时性能分析，结合 <code>eprintln!</code> 语句和基于频率的后处理，适用于获取代码部分的领域特定见解。它适用于所有平台。</li>
+<li><a href="https://github.com/plasma-umass/coz">Coz</a> 执行<em>因果分析</em>以测量优化潜力，并通过 <a href="https://github.com/plasma-umass/coz/tree/master/rust">coz-rs</a> 支持 Rust。它适用于 Linux。</li>
+<li></li>
 </ul>
-<h2 id="调试信息"><a class="header" href="#调试信息">调试信息</a></h2>
-<p>为了有效地描述一个发布版本的构建，你可能需要启用源代码行调试信息。要做到这一点，请在你的 <code>Cargo.toml</code>文件中添加以下行。</p>
+<p>为了有效地对发布版本进行性能分析，你可能需要启用源代码行调试信息。要做到这一点，在你的 <code>Cargo.toml</code> 文件中添加以下行：</p>
 <pre><code class="language-toml">[profile.release]
 debug = 1
 </code></pre>
-<p>关于 “debug “设置的更多细节，请参见[Cargo文档]。</p>
+<p>查看 <a href="https://doc.rust-lang.org/cargo/reference/profiles.html#debug">Cargo 文档</a> 以获取有关 <code>debug</code> 设置的更多详细信息。</p>
+<p>不幸的是，即使执行了上述步骤，你也无法获得标准库代码的详细性能分析信息。这是因为 Rust 标准库的发布版本未使用调试信息构建。</p>
+<p>最可靠的解决方法是构建自己的编译器和标准库版本，遵循 <a href="https://github.com/rust-lang/rust">这些说明</a>，并在 <code>config.toml</code> 文件中添加以下行：</p>
+<pre><code class="language-toml">[rust]
+debuginfo-level = 1
+</code></pre>
+<p>这可能有些麻烦，但在某些情况下值得努力。</p>
+<p>另外，不稳定的 <a href="https://doc.rust-lang.org/cargo/reference/unstable.html#build-std">build-std</a> 功能允许你将标准库作为程序正常编译的一部分进行编译，使用相同的构建配置。然而，标准库调试信息中存在的文件名将不指向源代码文件，因为此功能不会下载标准库源代码。因此，这种方法对于像 Cachegrind 和 Samply 这样需要源代码才能完全工作的性能分析工具并不适用。</p>
 <h2 id="symbol-demangling"><a class="header" href="#symbol-demangling">Symbol Demangling</a></h2>
 <p>Rust在编译代码中使用了一个杂乱的方案来编码函数名。如果一个剖析器不知道这个方案，它的输出可能会包含像这样的符号名
 <code>_ZN3foo3barE</code>或<code>_ZN28_$u7b$$u7b$closure$u7d$$u7d$E</code>或<code>_ZN28_$u7b$$$u7d$E</code>或
 <code>_ZN88_$LT$core.result.Result$LT$$u21$$C$$u20$E$GT$u20$as$u20$std.process.Termination$GT$6report17hfc41d0da4a40b3e8E</code>。
 像这样的名字，可以用<a href="https://crates.io/crates/rustfilt"><code>rustfilt</code></a>手动拆分。</p>
+<p>如果在进行性能分析时遇到符号解缠混淆的问题，可能值得将 <a href="https://doc.rust-lang.org/rustc/codegen-options/index.html#symbol-mangling-version">编码格式</a> 从默认的传统格式更改为更新的 v0 格式。</p>
+<p>要从命令行中使用 v0 格式，可以使用 <code>-C symbol-mangling-version=v0</code> 标志。例如：</p>
+<pre><code class="language-bash">RUSTFLAGS="-C symbol-mangling-version=v0" cargo build --release
+</code></pre>
+<p>另外，要从 <a href="https://doc.rust-lang.org/cargo/reference/config.html"><code>config.toml</code></a> 文件（针对一个或多个项目）请求这些说明，添加以下行：</p>
+<pre><code class="language-toml">[build]
+rustflags = ["-C", "symbol-mangling-version=v0"]
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="inlining"><a class="header" href="#inlining">Inlining</a></h1>
 <p>调用和退出热函数、未内联的函数往往占执行时间的一小部分。内联这些函数可以提供小而简单的速度优势。</p>
 <p>有四个内联属性可以用于Rust函数。</p>
 <ul>
 <li><strong>None</strong>. 编译器会自己决定是否应该内联函数。这将取决于优化级别、函数的大小等。如果你没有使用链接时间优化，函数永远不会跨箱子内联。</li>
 <li><strong><code>#[inline]</code></strong>. 这表明该函数应该内嵌，包括跨越crate边界。</li>
-<li><strong><code>#[inline(always)]</code></strong>. 这强烈建议该函数应该内嵌，包括跨越箱子边界。</li>
+<li><strong><code>#[inline(always)]</code></strong>. 这强烈建议该函数应该内嵌，包括跨越crate边界。</li>
 <li><strong><code>#[inline(never)]</code></strong>. 这强烈表示该函数不应被内联。</li>
 </ul>
-<p>内联属性并不能保证一个函数是内联或不内联的，但实际上，<code>#[inline(always)]</code>除了最特殊的情况外，都会导致内联。</p>
+<p>内联属性并不保证函数是否会被内联，但实际上 <code>#[inline(always)]</code> 会导致内联，除非在极端情况下。</p>
+<p>内联不具有传递性。如果函数 <code>f</code> 调用函数 <code>g</code>，并且您希望这两个函数在调用 <code>f</code> 的地方一起内联，那么这两个函数都应该标记为内联属性。</p>
 <h2 id="simple-cases"><a class="header" href="#simple-cases">Simple Cases</a></h2>
 <p>最适合内联的是(a)非常小的函数，或者(b)只有一个调用点的函数。编译器通常会自己内联这些函数，即使没有内联属性。但是编译器不可能总是做出最好的选择，所以有时需要属性。
 <a href="https://github.com/rust-lang/rust/pull/37083/commits/6a4bb35b70862f33ac2491ffe6c55fb210c8490d"><strong>Example 1</strong></a>,
@@ -418,7 +449,7 @@ debug = 1
 200,000      x + y
 200,000  }
 </code></pre>
-<p>添加内联属性后应该再测一次，因为效果可能是不可预知的。有时它没有效果，因为附近一个之前内联的函数不再内联了。有时会拖慢代码的速度。内联也会影响编译时间，特别是交叉速率内联，它涉及到重复函数的内部表示。</p>
+<p>添加内联属性后你应该再测一次，因为效果可能是不可预知的。有时它没有效果，因为附近一个之前内联的函数不再内联了。有时会拖慢代码的速度。内联也会影响编译时间，特别是交叉速率内联，它涉及到重复函数的内部表示。</p>
 <h2 id="harder-cases"><a class="header" href="#harder-cases">Harder Cases</a></h2>
 <p>有时候，你有一个函数很大，有多个调用站点，但只有一个调用点是热调用点。你希望内联热调用点以提高速度，但不内联冷调用点以避免不必要的代码膨胀。处理的方法是将函数分成总是内联和从不内联的部分，后者调用前者。</p>
 <p>例如，这个函数。</p>
@@ -564,6 +595,29 @@ assert_eq!(v1.capacity(), 99);
 <p><code>ToOwned::to_owned</code>]是为许多常见类型实现的。它从借来的数据中创建拥有的数据，通常是通过克隆的方式，因此经常会引起堆分配。例如，它可以用来从一个<code>&amp;str</code>创建一个<code>String</code>。</p>
 <p>有时，可以通过在结构中存储对借入数据的引用而不是自有副本来避免<code>to_owned</code>调用。这需要在结构体上做终身注解，使代码复杂化，只有在分析和基准测试表明值得时才可以这样做。
 <a href="https://github.com/rust-lang/rust/pull/50855/commits/6872377357dbbf373cfd2aae352cb74cfcc66f34"><strong>Example</strong></a>.</p>
+<h2 id="cow-1"><a class="header" href="#cow-1"><code>Cow</code></a></h2>
+<p>有时代码处理的是借用和拥有数据的混合。想象一下一个包含错误消息的向量，其中一些是静态字符串字面量，另一些是用 <code>format!</code> 构造的。显而易见的表示是 <code>Vec&lt;String&gt;</code>，如下例所示。</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut errors: Vec&lt;String&gt; = vec![];
+errors.push("something went wrong".to_string());
+errors.push(format!("something went wrong on line {}", 100));
+<span class="boring">}</span></code></pre></pre>
+<p>这需要一个 <code>to_string</code> 调用来将静态字符串字面量提升为 <code>String</code>，这会产生一次分配。</p>
+<p>相反，您可以使用 <a href="https://doc.rust-lang.org/std/borrow/enum.Cow.html"><code>Cow</code></a> 类型，它可以保存借用或拥有的数据。借用值 <code>x</code> 被包装在 <code>Cow::Borrowed(x)</code> 中，拥有值 <code>y</code> 被包装在 <code>Cow::Owned(y)</code> 中。<code>Cow</code> 还为各种字符串、切片和路径类型实现了 <code>From&lt;T&gt;</code> trait，因此通常也可以使用 <code>into</code>。 （或者 <code>Cow::from</code>，这更长一些，但会产生更易读的代码，因为它使类型更清晰。）以下示例将所有这些内容整合在一起。</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::borrow::Cow;
+let mut errors: Vec&lt;Cow&lt;'static, str&gt;&gt; = vec![];
+errors.push(Cow::Borrowed("something went wrong"));
+errors.push(Cow::Owned(format!("something went wrong on line {}", 100)));
+errors.push(Cow::from("something else went wrong"));
+errors.push(format!("something else went wrong on line {}", 101).into());
+<span class="boring">}</span></code></pre></pre>
+<p>现在，<code>errors</code> 包含了借用和拥有数据的混合，而无需进行任何额外的分配。这个示例涉及 <code>&amp;str</code>/<code>String</code>，但其他配对，如 <code>&amp;[T]</code>/<code>Vec&lt;T&gt;</code> 和 <code>&amp;Path</code>/<code>PathBuf</code> 也是可能的。</p>
+<p><a href="https://github.com/rust-lang/rust/pull/37064/commits/b043e11de2eb2c60f7bfec5e15960f537b229e20"><strong>Example 1</strong></a>,
+<a href="https://github.com/rust-lang/rust/pull/56336/commits/787959c20d062d396b97a5566e0a766d963af022"><strong>Example 2</strong></a>.</p>
+<p>以上所有内容适用于数据是不可变的情况。但是，<code>Cow</code> 也允许将借用数据提升为拥有数据，如果需要对其进行修改。<a href="https://doc.rust-lang.org/std/borrow/enum.Cow.html#method.to_mut"><code>Cow::to_mut</code></a> 将获得一个可变引用到一个拥有值，必要时进行克隆。这就是所谓的“写时复制”，也是 <code>Cow</code> 名称的由来。</p>
 <h2 id="reusing-collections"><a class="header" href="#reusing-collections">Reusing Collections</a></h2>
 <p>有时你需要分阶段建立一个集合，如<code>Vec</code>。通常情况下，通过修改一个<code>Vec</code>比建立多个<code>Vec</code>然后将它们组合起来更好。</p>
 <p>例如，如果你有一个函数 “do_stuff”，产生一个 “Vec”，可能会被多次调用。</p>
@@ -585,25 +639,53 @@ assert_eq!(v1.capacity(), 99);
 <a href="https://github.com/rust-lang/rust/pull/77990/commits/45faeb43aecdc98c9e3f2b24edf2ecc71f39d323"><strong>Example 1</strong></a>,
 <a href="https://github.com/rust-lang/rust/pull/51870/commits/b0c78120e3ecae5f4043781f7a3f79e2277293e7"><strong>Example 2</strong></a>.</p>
 <p>同样，有时值得在一个结构中保留一个 “主力 “集合，以便在一个或多个被重复调用的方法中重用。</p>
-<h2 id="使用其他分配器"><a class="header" href="#使用其他分配器">使用其他分配器</a></h2>
-<p>另一个提高分配量大的Rust程序性能的选择是用一个替代分配器代替默认的（系统）分配器。确切的效果将取决于单个程序和选择的替代分配器。在不同的平台上，它也会有所不同，因为每个平台的系统分配器都有自己的优势和弱点。使用替代分配器也会影响二进制大小。</p>
-<p>一个流行的替代分配器是<a href="https://github.com/jemalloc/jemalloc">jemalloc</a>，可通过 <a href="https://crates.io/crates/jemallocator"><code>jemallocator</code></a>箱子。要使用它，请在你的<code>Cargo.toml</code>文件中添加一个依赖关系。</p>
-<pre><code class="language-toml">[dependencies]
-jemallocator = "0.3.2"
-</code></pre>
-<p>然后在你的Rust代码中添加以下内容。</p>
-<pre><code class="language-rust ignore">#[global_allocator]
-static GLOBAL: jemallocator::Jemalloc = jemallocator::Jemalloc;</code></pre>
-<p>另一个可供选择的分配器是<a href="https://github.com/microsoft/mimalloc">mimalloc</a>，可通过<a href="https://docs.rs/mimalloc/0.1.22/mimalloc/"><code>mimalloc</code></a>板房使用。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="type-sizes"><a class="header" href="#type-sizes">Type Sizes</a></h1>
-<p>缩小常实例类型可以减少峰值内存使用量，还可以通过减少内存流量和缓存压力来提高性能。(特别要注意的是，大于128字节的类型会用 <code>memcpy</code>而不是内联代码)</p>
-<p>Rust编译器会自动对struct和enums中的字段进行排序，以最小化它们的大小（除非指定了<code>#[repr(C)]</code>属性），所以你不必担心字段的排序。但是仍然有其他方法可以使热类型的大小最小化。</p>
-<h2 id="measuring-type-sizes"><a class="header" href="#measuring-type-sizes">Measuring Type Sizes</a></h2>
+<h2 id="从文件中逐行读取"><a class="header" href="#从文件中逐行读取">从文件中逐行读取</a></h2>
+<p><a href="https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.lines"><code>BufRead::lines</code></a> 使得逐行读取文件变得很容易：</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn blah() -&gt; Result&lt;(), std::io::Error&gt; {
+</span><span class="boring">fn process(_: &amp;str) {}
+</span>use std::io::{self, BufRead};
+let mut lock = io::stdin().lock();
+for line in lock.lines() {
+    process(&amp;line?);
+}
+<span class="boring">Ok(())
+</span><span class="boring">}
+</span><span class="boring">}</span></code></pre></pre>
+<p>但它生成的迭代器返回的是 <code>io::Result&lt;String&gt;</code>，这意味着它为文件中的每一行分配内存。</p>
+<p>另一种方法是在循环中使用一个工作用的 <code>String</code>，通过 <a href="https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.read_line"><code>BufRead::read_line</code></a>：</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn blah() -&gt; Result&lt;(), std::io::Error&gt; {
+</span><span class="boring">fn process(_: &amp;str) {}
+</span>use std::io::{self, BufRead};
+let mut lock = io::stdin().lock();
+let mut line = String::new();
+while lock.read_line(&amp;mut line)? != 0 {
+    process(&amp;line);
+    line.clear();
+}
+<span class="boring">Ok(())
+</span><span class="boring">}
+</span><span class="boring">}</span></code></pre></pre>
+<p>这样可以将分配的次数降至最多几次，甚至可能只有一次。（确切的次数取决于需要多少次重新分配 <code>line</code>，这取决于文件中行长度的分布情况。）</p>
+<p>这种方法只适用于循环体能够操作 <code>&amp;str</code> 而不是 <code>String</code> 的情况。</p>
+<p><a href="https://github.com/nnethercote/counts/commit/7d39bbb1867720ef3b9799fee739cd717ad1539a"><strong>Example</strong></a>.</p>
+<h2 id="使用不同的分配器"><a class="header" href="#使用不同的分配器">使用不同的分配器</a></h2>
+<p>除了更改代码外，还可以通过使用不同的分配器来改善堆分配性能。请参阅 <a href="build-configuration.html#alternative-allocators_zh">Alternative Allocators</a> 部分获取详细信息。</p>
+<h2 id="避免回归"><a class="header" href="#避免回归">避免回归</a></h2>
+<p>为了确保代码执行时的分配次数和/或大小不会意外增加，您可以使用 <a href="https://crates.io/crates/dhat">dhat-rs</a> 的 <em>堆使用测试</em> 功能编写测试，检查特定代码段分配了预期量的堆内存。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="类型大小"><a class="header" href="#类型大小">类型大小</a></h1>
+<p>缩小经常实例化的类型可以提高性能。</p>
+<p>例如，如果内存使用量很高，像 [DHAT] 这样的堆分析器可以识别热点分配点和涉及的类型。缩小这些类型可以减少峰值内存使用量，并通过减少内存流量和缓存压力可能改善性能。</p>
+<p>此外，Rust 中大于 128 字节的类型会使用 <code>memcpy</code> 进行复制，而不是内联代码。如果在性能分析中出现大量 <code>memcpy</code>，DHAT 的 “copy profiling” 模式将告诉您热点 <code>memcpy</code> 调用的确切位置和涉及的类型。将这些类型缩小到 128 字节或更小可以通过避免 <code>memcpy</code> 调用和减少内存流量使代码更快。</p>
+<h2 id="测量类型大小"><a class="header" href="#测量类型大小">测量类型大小</a></h2>
 <p><a href="https://doc.rust-lang.org/std/mem/fn.size_of.html"><code>std::mem::size_of</code></a>给出了一个类型的大小，以字节为单位，但通常你也想知道确切的布局。例如，一个枚举可能会出乎意料的大，这可能是由一个超大的变体造成的。</p>
-<p>`-Zprint-type-sizes’选项正是这样做的，它在rustc的发行版上没有被启用，所以你需要使用rustc的夜间版本。 下面是一个通过Cargo的可能调用</p>
+<p><code>-Zprint-type-sizes</code>选项正是这样做的，它在rustc的发行版上没有被启用，所以你需要使用<code>rustc</code>的夜间版本。 下面是一个通过<code>Cargo</code>的可能调用</p>
 <pre><code class="language-text">RUSTFLAGS=-Zprint-type-sizes cargo +nightly build --release
 </code></pre>
-<p>而这里是一个rustc的可能调用</p>
+<p>而这里是一个<code>rustc</code>的可能调用</p>
 <pre><code class="language-text">rustc +nightly -Zprint-type-sizes input.rs
 </code></pre>
 <p>它将打印出所有使用中的类型的尺寸、布局和对齐方式的详细信息。例如，对于这种类型。</p>
@@ -641,8 +723,11 @@ print-type-size     variant `A`: 0 bytes
 <li>所有字段的大小、对齐和排序。(请注意，编译器对变体<code>C</code>的字段进行了重新排序，以最小化<code>E</code>的大小。)</li>
 <li>所有padding的大小和位置。</li>
 </ul>
+<p>另外，可以使用 <a href="https://crates.io/crates/top-type-sizes">top-type-sizes</a> crate 来以更紧凑的形式显示输出。</p>
 <p>一旦你知道了热型的布局，就有多种方法来收缩它。</p>
-<h2 id="smaller-enums"><a class="header" href="#smaller-enums">Smaller Enums</a></h2>
+<h2 id="字段顺序"><a class="header" href="#字段顺序">字段顺序</a></h2>
+<p>Rust编译器会自动对结构体和枚举的字段进行排序，以最小化它们的大小（除非指定了 <code>#[repr(C)]</code> 属性），因此您无需担心字段顺序的问题。但是，还有其他方法可以最小化热门类型的大小。</p>
+<h2 id="更小的枚举"><a class="header" href="#更小的枚举">更小的枚举</a></h2>
 <p>如果一个枚举有一个超大的变体，可以考虑将一个或多个字段装箱。例如，你可以改变这个类型。</p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -670,7 +755,7 @@ enum A {
 <a href="https://github.com/rust-lang/rust/pull/64374/commits/2fcd870711ce267c79408ec631f7eba8e0afcdf6"><strong>Example 4</strong></a>,
 <a href="https://github.com/rust-lang/rust/pull/64394/commits/7f0637da5144c7435e88ea3805021882f077d50c"><strong>Example 5</strong></a>,
 <a href="https://github.com/rust-lang/rust/pull/71942/commits/27ae2f0d60d9201133e1f9ec7a04c05c8e55e665"><strong>Example 6</strong></a>.</p>
-<h2 id="smaller-integers"><a class="header" href="#smaller-integers">Smaller Integers</a></h2>
+<h2 id="更小的intergers"><a class="header" href="#更小的intergers">更小的intergers</a></h2>
 <p>通常可以通过使用较小的整数类型来缩小类型。例如，虽然对索引使用 “usize “是最自然的，但将索引存储为 “u32”、“u16”、甚至 “u8”，然后在使用点强制使用 “usize”，往往是合理的。
 <a href="https://github.com/rust-lang/rust/pull/49993/commits/4d34bfd00a57f8a8bdb60ec3f908c5d4256f8a9a"><strong>Example 1</strong></a>,
 <a href="https://github.com/rust-lang/rust/pull/50981/commits/8d0fad5d3832c6c1f14542ea0be038274e454524"><strong>Example 2</strong></a>.</p>
@@ -686,18 +771,25 @@ let bs: Box&lt;[u32]&gt; = v.into_boxed_slice();
 assert_eq!(size_of_val(&amp;bs), 2 * size_of::&lt;usize&gt;());
 <span class="boring">}</span></code></pre></pre>
 <p>盒状切片可以用<a href="https://doc.rust-lang.org/std/primitive.slice.html#method.into_vec"><code>slice::into_vec</code></a>转换回一个矢量，而无需任何克隆或重新分配。</p>
+<h2 id="thinvec"><a class="header" href="#thinvec"><code>ThinVec</code></a></h2>
+<p><code>ThinVec</code>是一个替代Boxed slices的选择，来自于<code>thin_vec</code> crate。它在功能上等同于<code>Vec</code>，但是在与元素相同的分配中存储长度和容量。这意味着<code>size_of::&lt;ThinVec&lt;T&gt;&gt;</code>只占用一个字。</p>
+<p>在经常实例化的类型中，<code>ThinVec</code>是一个不错的选择，适用于经常为空的向量。它还可以用于缩小枚举的最大变体，如果该变体包含一个<code>Vec</code>。</p>
 <h2 id="avoiding-regressions"><a class="header" href="#avoiding-regressions">Avoiding Regressions</a></h2>
 <p>如果一个类型足够热，它的大小会影响性能，那么最好使用静态断言来确保它不会意外地回归。下面的例子使用了<a href="https://crates.io/crates/static_assertions"><code>static_assertions</code></a>中的一个宏。</p>
 <pre><code class="language-rust ignore">  // This type is used a lot. Make sure it doesn't unintentionally get bigger.
   #[cfg(target_arch = "x86_64")]
   static_assertions::assert_eq_size!(HotType, [u8; 64]);</code></pre>
-<p><code>cfg</code>属性很重要，因为类型大小在不同的平台上会有所不同。将断言限制在 “x86_64”(通常是最广泛使用的平台)可能足以防止实际中的回落。</p>
+<p><code>cfg</code>属性很重要，因为类型大小在不同的平台上会有所不同。将断言限制在 “<code>x86_64</code>”(通常是最广泛使用的平台)可能足以防止实际中的回落。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="standard-library-types"><a class="header" href="#standard-library-types">Standard Library Types</a></h1>
 <p>值得阅读常见标准库类型的文档–如<a href="https://doc.rust-lang.org/std/vec/struct.Vec.html"><code>Vec</code></a>、<a href="https://doc.rust-lang.org/std/option/enum.Option.html"><code>Option</code></a>、<a href="https://doc.rust-lang.org/std/result/enum.Result.html"><code>Result</code></a>和<a href="https://doc.rust-lang.org/std/rc/struct.Rc.html"><code>Rc</code></a>–以找到有趣的函数，有时可以用来提高性能。</p>
 <p>还值得了解标准库类型的高性能替代品，如<a href="https://doc.rust-lang.org/std/sync/struct.Mutex.html"><code>Mutex</code></a>、<a href="https://doc.rust-lang.org/std/sync/struct.RwLock.html"><code>RwLock</code></a>、<a href="https://doc.rust-lang.org/std/sync/struct.Condvar.html"><code>Condvar</code></a>和<a href="https://doc.rust-lang.org/std/sync/struct.Once.html"><code>Once</code></a>。</p>
+<h2 id="box-1"><a class="header" href="#box-1"><code>Box</code></a></h2>
+<p>表达式 <a href="https://doc.rust-lang.org/std/boxed/struct.Box.html#method.default"><code>Box::default()</code></a> 的效果与 <code>Box::new(T::default())</code> 相同，但可能更快，因为编译器可以直接在堆上创建值，而不是在堆栈上构造值然后复制它。
+<a href="https://github.com/komora-io/art/commit/d5dc58338f475709c375e15976d0d77eb5d7f7ef"><strong>示例</strong></a>。</p>
 <h2 id="vec-1"><a class="header" href="#vec-1"><code>Vec</code></a></h2>
-<p><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.remove"><code>Vec::remove</code></a>删除某一特定索引上的一个元素，并将随后的所有元素向左移动一个，这样做是O(n)。<a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.swap_remove"><code>Vec::swap_remove</code></a> 用最后一个元素替换特定索引上的一个元素，虽然不保留排序，但也是O(1)。</p>
-<p><code>Vec::retain</code>] 有效地从一个<code>Vec</code>中删除多个项目。对于其他集合类型，如<code>String</code>、<code>HashSet</code>和<code>HashMap</code>，也有一个等价的方法。</p>
+<p>创建长度为 <code>n</code> 的零填充 <code>Vec</code> 的最佳方法是使用 <code>vec![0; n]</code>。这种方法简单且可能比其他方法更快，比如使用 <code>resize</code>、<code>extend</code> 或涉及 <code>unsafe</code> 的任何操作，因为它可以利用操作系统的帮助。</p>
+<p><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.remove"><code>Vec::remove</code></a> 会移除特定索引处的元素，并将所有后续元素向左移动一个位置，这使得它的时间复杂度为 O(n)。<a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.swap_remove"><code>Vec::swap_remove</code></a> 会用最后一个元素替换特定索引处的元素，这不会保留顺序，但时间复杂度为 O(1)。</p>
+<p><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.retain"><code>Vec::retain</code></a> 可以高效地从 <code>Vec</code> 中移除多个项。其他集合类型如 <code>String</code>、<code>HashSet</code> 和 <code>HashMap</code> 也有类似的方法。</p>
 <h2 id="option-and-result"><a class="header" href="#option-and-result"><code>Option</code> and <code>Result</code></a></h2>
 <p>[<code>Option::ok_or']将</code>Option’转换为<code>Result'，并传递一个</code>err’参数，如果<code>Option'值为</code>None’，则使用该参数。<code>err</code>是急于计算的。如果它的计算很昂贵，你应该使用<a href="https://doc.rust-lang.org/std/option/enum.Option.html#method.ok_or_else"><code>Option::ok_or_else</code></a>，它通过一个闭包缓慢地计算错误值。
 例如，这个。</p>
@@ -716,22 +808,48 @@ assert_eq!(size_of_val(&amp;bs), 2 * size_of::&lt;usize&gt;());
 <span class="boring">}</span></code></pre></pre>
 <p><a href="https://github.com/rust-lang/rust/pull/50051/commits/5070dea2366104fb0b5c344ce7f2a5cf8af176b0"><strong>Example</strong></a>.</p>
 <p><a href="https://doc.rust-lang.org/std/option/enum.Option.html#method.map_or"><code>Option::map_or</code></a>、<a href="https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or"><code>Option::unwrap_or</code></a>、<a href="https://doc.rust-lang.org/std/result/enum.Result.html#method.or"><code>Result::or</code></a>、<a href="https://doc.rust-lang.org/std/result/enum.Result.html#method.map_or"><code>Result::map_or</code></a>和<a href="https://doc.rust-lang.org/std/result/enum.Result.html#method.unwrap_or"><code>Result::unwrap_or</code></a>有类似的替代方案。</p>
-<h2 id="rc"><a class="header" href="#rc"><code>Rc</code></a></h2>
-<p><a href="https://doc.rust-lang.org/std/rc/struct.Rc.html#method.make_mut"><code>Rc::make_mut</code></a>为<code>Rc</code>提供了write-on-write语义。它对<code>Rc</code>做了一个可改变的引用。如果refcount大于1，它将<code>clone</code>内部值以确保唯一的所有权；否则，它将修改原始值。它不经常需要，但偶尔会非常有用。
+<h2 id="rcarc-1"><a class="header" href="#rcarc-1"><code>Rc</code>/<code>Arc</code></a></h2>
+<p><a href="https://doc.rust-lang.org/std/rc/struct.Rc.html#method.make_mut"><code>Rc::make_mut</code></a>/<a href="https://doc.rust-lang.org/std/sync/struct.Arc.html#method.make_mut"><code>Arc::make_mut</code></a>提供了clone-on-write语义。它对<code>Rc</code>做了一个可改变的引用。如果refcount大于1，它将<code>clone</code>内部值以确保唯一的所有权；否则，它将修改原始值。它不经常需要，但偶尔会非常有用。
 <a href="https://github.com/rust-lang/rust/pull/65198/commits/3832a634d3aa6a7c60448906e6656a22f7e35628"><strong>Example 1</strong></a>,
 <a href="https://github.com/rust-lang/rust/pull/65198/commits/75e0078a1703448a19e25eac85daaa5a4e6e68ac"><strong>Example 2</strong></a>.</p>
 <h2 id="mutex-rwlock-condvar-and-once"><a class="header" href="#mutex-rwlock-condvar-and-once"><code>Mutex</code>, <code>RwLock</code>, <code>Condvar</code>, and <code>Once</code></a></h2>
-<p><a href="https://crates.io/crates/parking_lot"><code>parking_lot</code></a>提供了这些同步类型的替代实现，它们比标准库中的同步类型更小、更快、更灵活。<code>parking_lot</code>类型的API和语义与标准库中的等价类型相似，但不完全相同。</p>
+<p><a href="https://crates.io/crates/parking_lot"><code>parking_lot</code></a> crate提供了这些同步类型的替代实现。<code>parking_lot</code> 类型的API和语义与标准库中等效类型的类似但并非完全相同。</p>
+<p>过去，<code>parking_lot</code> 版本通常比标准库中的版本更小、更快、更灵活，但在某些平台上，标准库版本已经有了很大改进。因此，在切换到 <code>parking_lot</code> 之前，您应该进行测量。</p>
+<p>如果决定普遍使用 <code>parking_lot</code> 类型，很容易在某些地方意外地使用标准库的等效类型。您可以使用 <a href="linting.html#disallowing-types">Clippy</a> 来避免这个问题。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="iterators"><a class="header" href="#iterators">Iterators</a></h1>
 <h2 id="collect"><a class="header" href="#collect"><code>collect</code></a></h2>
 <p><a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect"><code>Iterator::collect</code></a>将一个迭代器转换为一个集合，如<code>Vec</code>，它通常需要一个分配。如果该集合只是再次迭代，你应该避免调用<code>collect</code>。</p>
 <p>出于这个原因，从函数中返回一个迭代器类型，比如<code>impl Iterator&lt;Item=T&gt;</code>，往往比<code>Vec&lt;T&gt;</code>更好。请注意，有时这些返回类型需要额外的生存期，正如<a href="https://blog.katona.me/2019/12/29/Rust-Lifetimes-and-Iterators/">this post</a>所解释的那样。
 <a href="https://github.com/rust-lang/rust/pull/77990/commits/660d8a6550a126797aa66a417137e39a5639451b"><strong>Example</strong></a>.</p>
 <p>同样，你可以使用<a href="https://doc.rust-lang.org/std/iter/trait.Extend.html#tymethod.extend"><code>extend</code></a>用迭代器扩展一个现有的集合（如<code>Vec</code>），而不是将迭代器收集到<code>Vec</code>中，然后使用<a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.append"><code>append</code></a>。</p>
+<p>最后，当编写迭代器时，如果可能的话，实现 <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.size_hint"><code>Iterator::size_hint</code></a> 或 <a href="https://doc.rust-lang.org/std/iter/trait.ExactSizeIterator.html#method.len"><code>ExactSizeIterator::len</code></a> 方法通常是值得的。使用该迭代器的 <code>collect</code> 和 <code>extend</code> 调用可能会减少分配，因为它们提前了解迭代器产生的元素数量信息。</p>
 <h2 id="chaining"><a class="header" href="#chaining">Chaining</a></h2>
 <p><a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.chain"><code>chain</code></a>可以非常方便，但也可能比单个迭代器慢。如果可能的话，热迭代器可能值得避免。
 <a href="https://github.com/rust-lang/rust/pull/64801/commits/5ca99b750e455e9b5e13e83d0d7886486231e48a"><strong>Example</strong></a>.</p>
 <p>类似地，<a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.filter_map"><code>filter_map</code></a>可能比使用<a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.filter"><code>filter</code></a>和<a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.map"><code>map</code></a>更快。</p>
+<h2 id="chunks"><a class="header" href="#chunks">Chunks</a></h2>
+<p>当需要一个分块迭代器，并且已知分块大小恰好能整除切片长度时，应该使用更快的 <a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.chunks_exact"><code>slice::chunks_exact</code></a> 而不是 <a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.chunks"><code>slice::chunks</code></a>。</p>
+<p>当分块大小不确定能否恰好整除切片长度时，仍然可以更快地使用 <code>slice::chunks_exact</code>，结合 <a href="https://doc.rust-lang.org/stable/std/slice/struct.ChunksExact.html#method.remainder"><code>ChunksExact::remainder</code></a> 或手动处理多余元素。
+<a href="https://github.com/johannesvollmer/exrs/pull/173/files"><strong>Example 1</strong></a>,
+<a href="https://github.com/johannesvollmer/exrs/pull/175/files"><strong>Example 2</strong></a>.</p>
+<p>同样适用于相关的迭代器:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.rchunks"><code>slice::rchunks</code></a>, <a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.rchunks_exact"><code>slice::rchunks_exact</code></a>, and <a href="https://doc.rust-lang.org/stable/std/slice/struct.RChunksExact.html#method.remainder"><code>RChunksExact::remainder</code></a>;</li>
+<li><a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.chunks_mut"><code>slice::chunks_mut</code></a>, <a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.chunks_exact_mut"><code>slice::chunks_exact_mut</code></a>, and <a href="https://doc.rust-lang.org/stable/std/slice/struct.ChunksExactMut.html#method.into_remainder"><code>ChunksExactMut::into_remainder</code></a>;</li>
+<li><a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.rchunks_mut"><code>slice::rchunks_mut</code></a>, <a href="https://doc.rust-lang.org/stable/std/primitive.slice.html#method.rchunks_exact_mut"><code>slice::rchunks_exact_mut</code></a>, and <a href="https://doc.rust-lang.org/stable/std/slice/struct.RChunksExactMut.html#method.into_remainder"><code>RChunksExactMut::into_remainder</code></a>.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="bounds-checks"><a class="header" href="#bounds-checks">Bounds Checks</a></h1>
+<p>默认情况下，在 Rust 中，对切片和向量等容器类型的访问涉及边界检查。这可能会影响性能，例如在热循环中，尽管发生的频率可能不如您所预期的那样频繁。</p>
+<p>有几种安全的方法可以更改代码，以便编译器了解容器的长度并优化掉边界检查。</p>
+<ul>
+<li>在循环中，通过迭代替换直接元素访问。</li>
+<li>在循环中，不要对 Vec 进行索引，而是在循环之前创建 Vec 的切片，然后在循环中对切片进行索引。</li>
+<li>在索引变量的范围上添加断言。
+<a href="https://github.com/rust-random/rand/pull/960/commits/de9dfdd86851032d942eb583d8d438e06085867b"><strong>Example 1</strong></a>,
+<a href="https://github.com/image-rs/jpeg-decoder/pull/167/files"><strong>Example 2</strong></a>.</li>
+</ul>
+<p>让这些方法起作用可能有些棘手。<a href="https://github.com/Shnatsel/bounds-check-cookbook/">Bounds Check Cookbook</a>对这个主题进行了更详细的介绍</p>
+<p>作为最后的手段，还有不安全的方法 [get_unchecked] 和 [get_unchecked_mut]。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="io"><a class="header" href="#io">I/O</a></h1>
 <h2 id="locking"><a class="header" href="#locking">Locking</a></h2>
 <p>Rust的<a href="https://doc.rust-lang.org/std/macro.print.html"><code>print!</code></a>和<a href="https://doc.rust-lang.org/std/macro.println.html"><code>println!</code></a>宏在每次调用时锁定stdout。如果你需要重复调用这些宏，最好手动锁定stdout。</p>
@@ -790,7 +908,10 @@ buf.flush()?;
 </span><span class="boring">}
 </span><span class="boring">}</span></code></pre></pre>
 <p>对<a href="https://doc.rust-lang.org/std/io/trait.Write.html#tymethod.flush"><code>flush</code></a>的显式调用并不是绝对必要的，因为当<code>buf</code>被丢弃时，刷新将自动发生。然而，在这种情况下，刷新时发生的任何错误都将被忽略，而显式刷新将使该错误显式化。</p>
-<p>请注意，缓冲也适用于stdout，所以当你向stdout进行大量写入时，你可能需要结合手动锁定<em>和</em>缓冲。</p>
+<p>在编写时忘记使用缓冲区是比较常见的。无缓冲和有缓冲的写入器都实现了 [Write] trait，这意味着向无缓冲写入器和有缓冲写入器写入的代码基本相同。相比之下，无缓冲读取器实现了 [Read] trait，但有缓冲读取器实现了 [BufRead] trait，这意味着从无缓冲读取器和有缓冲读取器读取的代码是不同的。例如，使用无缓冲读取器逐行读取文件是困难的，但使用有缓冲读取器通过 [BufRead::read_line] 或 [BufRead::lines] 则很简单。因此，对于读取器来说，很难像对写入器那样编写一个示例，其中之前和之后的版本是如此相似。</p>
+<p>最后，请注意，缓冲也适用于标准输出(stdout)，因此当向标准输出频繁写入时，您可能希望结合手动锁定和缓冲。</p>
+<h2 id="reading-lines-from-a-file"><a class="header" href="#reading-lines-from-a-file">Reading Lines from a File</a></h2>
+<p><a href="heap-allocations_zh.html#reading-lines-from-a-file">这一部分</a>解释了如何在使用 [BufRead] 逐行读取文件时避免过多的内存分配。</p>
 <h2 id="reading-input-as-raw-bytes"><a class="header" href="#reading-input-as-raw-bytes">Reading Input as Raw Bytes</a></h2>
 <p>内置的<a href="https://doc.rust-lang.org/std/string/struct.String.html">String</a>类型在内部使用UTF-8，当你读取输入到string类型时，会增加一个由UTF-8验证引起的小但非零的开销。如果你只想处理输入字节而不担心UTF-8（例如，如果你处理ASCII文本），你可以使用<a href="https://doc.rust-lang.org/std/io/trait.BufRead.html#method.read_until"><code>BufRead::read_until</code></a>。</p>
 <p>还有专门的箱子用于读取<a href="https://github.com/Freaky/rust-linereader">面向字节的数据行</a>和处理<a href="https://github.com/BurntSushi/bstr">byte strings</a>。</p>
@@ -822,11 +943,8 @@ buf.flush()?;
 <p>这是否有助于性能，将取决于值的具体访问模式。
 <a href="https://github.com/rust-lang/rust/pull/68694/commits/7426853ba255940b880f2e7f8026d60b94b42404"><strong>Example</strong></a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="machine-code"><a class="header" href="#machine-code">Machine Code</a></h1>
-<p>当你有一小段非常热的代码时，可能值得检查一下生成的机器代码，看看它是否有任何效率低下的地方。在这样做的时候，<a href="https://godbolt.org/">Compiler Explorer</a>网站是一个很好的资源。</p>
+<p>当你有一小段非常频繁执行的热点代码时，值得检查生成的机器代码，看看是否存在一些低效之处，比如可移除的<a href="https://en.wikipedia.org/wiki/Bounds_checking">边界检查</a>。在处理小片段时，<a href="https://godbolt.org/">Compiler Explorer</a> 网站是一个很好的资源。而 <a href="https://github.com/thephoeron/cargo-show-asm"><code>cargo-show-asm</code></a> 则是另一个工具，可以用于完整的 Rust 项目。</p>
 <p>与此相关的是，<a href="https://doc.rust-lang.org/core/arch/index.html"><code>core::arch</code></a>模块提供了对特定架构的固有知识的访问，其中许多与SIMD指令有关。</p>
-<p>有时可以通过在索引变量的范围内添加断言来避免循环内的边界检查。这是一种先进的技术，你应该检查生成的代码以确保边界检查被实际删除。
-<a href="https://github.com/rust-random/rand/pull/960/commits/de9dfdd86851032d942eb583d8d438e06085867b"><strong>Example 1</strong></a>,
-<a href="https://github.com/image-rs/jpeg-decoder/pull/167/files"><strong>Example 2</strong></a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="parallelism"><a class="header" href="#parallelism">Parallelism</a></h1>
 <p>Rust为安全的并行编程提供了很好的支持，这可以带来很大的性能提升。有多种方法可以将并行性引入到程序中，对于任何程序来说，最好的方式在很大程度上取决于其设计。</p>
 <p>对并行性的深入研究超出了本书的范围。如果你对这一主题感兴趣，[rayon]和[crossbeam]板条箱的文档是一个很好的开始。</p>
