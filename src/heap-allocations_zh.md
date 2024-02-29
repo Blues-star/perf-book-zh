@@ -183,6 +183,37 @@ assert_eq!(v1.capacity(), 99);
 有时，可以通过在结构中存储对借入数据的引用而不是自有副本来避免`to_owned`调用。这需要在结构体上做终身注解，使代码复杂化，只有在分析和基准测试表明值得时才可以这样做。
 [**Example**](https://github.com/rust-lang/rust/pull/50855/commits/6872377357dbbf373cfd2aae352cb74cfcc66f34).
 
+## `Cow`
+
+有时代码处理的是借用和拥有数据的混合。想象一下一个包含错误消息的向量，其中一些是静态字符串字面量，另一些是用 `format!` 构造的。显而易见的表示是 `Vec<String>`，如下例所示。
+```rust
+let mut errors: Vec<String> = vec![];
+errors.push("something went wrong".to_string());
+errors.push(format!("something went wrong on line {}", 100));
+```
+这需要一个 `to_string` 调用来将静态字符串字面量提升为 `String`，这会产生一次分配。
+
+相反，您可以使用 [`Cow`] 类型，它可以保存借用或拥有的数据。借用值 `x` 被包装在 `Cow::Borrowed(x)` 中，拥有值 `y` 被包装在 `Cow::Owned(y)` 中。`Cow` 还为各种字符串、切片和路径类型实现了 `From<T>` trait，因此通常也可以使用 `into`。 （或者 `Cow::from`，这更长一些，但会产生更易读的代码，因为它使类型更清晰。）以下示例将所有这些内容整合在一起。
+
+[`Cow`]: https://doc.rust-lang.org/std/borrow/enum.Cow.html
+
+```rust
+use std::borrow::Cow;
+let mut errors: Vec<Cow<'static, str>> = vec![];
+errors.push(Cow::Borrowed("something went wrong"));
+errors.push(Cow::Owned(format!("something went wrong on line {}", 100)));
+errors.push(Cow::from("something else went wrong"));
+errors.push(format!("something else went wrong on line {}", 101).into());
+```
+
+现在，`errors` 包含了借用和拥有数据的混合，而无需进行任何额外的分配。这个示例涉及 `&str`/`String`，但其他配对，如 `&[T]`/`Vec<T>` 和 `&Path`/`PathBuf` 也是可能的。
+
+
+[**Example 1**](https://github.com/rust-lang/rust/pull/37064/commits/b043e11de2eb2c60f7bfec5e15960f537b229e20),
+[**Example 2**](https://github.com/rust-lang/rust/pull/56336/commits/787959c20d062d396b97a5566e0a766d963af022).
+
+以上所有内容适用于数据是不可变的情况。但是，`Cow` 也允许将借用数据提升为拥有数据，如果需要对其进行修改。[`Cow::to_mut`] 将获得一个可变引用到一个拥有值，必要时进行克隆。这就是所谓的“写时复制”，也是 `Cow` 名称的由来。
+
 ## Reusing Collections
 
 有时你需要分阶段建立一个集合，如`Vec`。通常情况下，通过修改一个`Vec`比建立多个`Vec`然后将它们组合起来更好。
@@ -208,23 +239,54 @@ fn do_stuff(x: u32, y: u32, vec: &mut Vec<u32>) {
 
 同样，有时值得在一个结构中保留一个 "主力 "集合，以便在一个或多个被重复调用的方法中重用。
 
-## 使用其他分配器
+## 从文件中逐行读取
 
-另一个提高分配量大的Rust程序性能的选择是用一个替代分配器代替默认的（系统）分配器。确切的效果将取决于单个程序和选择的替代分配器。在不同的平台上，它也会有所不同，因为每个平台的系统分配器都有自己的优势和弱点。使用替代分配器也会影响二进制大小。
-
-一个流行的替代分配器是[jemalloc]，可通过 [`jemallocator`]箱子。要使用它，请在你的`Cargo.toml`文件中添加一个依赖关系。
-```toml
-[dependencies]
-jemallocator = "0.3.2"
+[`BufRead::lines`] 使得逐行读取文件变得很容易：
+```rust
+# fn blah() -> Result<(), std::io::Error> {
+# fn process(_: &str) {}
+use std::io::{self, BufRead};
+let mut lock = io::stdin().lock();
+for line in lock.lines() {
+    process(&line?);
+}
+# Ok(())
+# }
 ```
-然后在你的Rust代码中添加以下内容。
-```rust,ignore
-#[global_allocator]
-static GLOBAL: jemallocator::Jemalloc = jemallocator::Jemalloc;
-```
-另一个可供选择的分配器是[mimalloc]，可通过[`mimalloc`]板房使用。
+但它生成的迭代器返回的是 `io::Result<String>`，这意味着它为文件中的每一行分配内存。
 
-[jemalloc]: https://github.com/jemalloc/jemalloc
-[`jemallocator`]: https://crates.io/crates/jemallocator
-[mimalloc]: https://github.com/microsoft/mimalloc
-[`mimalloc`]: https://docs.rs/mimalloc/0.1.22/mimalloc/
+[`BufRead::lines`]: https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.lines
+
+另一种方法是在循环中使用一个工作用的 `String`，通过 [`BufRead::read_line`]：
+```rust
+# fn blah() -> Result<(), std::io::Error> {
+# fn process(_: &str) {}
+use std::io::{self, BufRead};
+let mut lock = io::stdin().lock();
+let mut line = String::new();
+while lock.read_line(&mut line)? != 0 {
+    process(&line);
+    line.clear();
+}
+# Ok(())
+# }
+```
+这样可以将分配的次数降至最多几次，甚至可能只有一次。（确切的次数取决于需要多少次重新分配 `line`，这取决于文件中行长度的分布情况。）
+
+这种方法只适用于循环体能够操作 `&str` 而不是 `String` 的情况。
+
+[`BufRead::read_line`]: https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.read_line
+
+[**Example**](https://github.com/nnethercote/counts/commit/7d39bbb1867720ef3b9799fee739cd717ad1539a).
+
+## 使用不同的分配器
+
+除了更改代码外，还可以通过使用不同的分配器来改善堆分配性能。请参阅 [Alternative Allocators] 部分获取详细信息。
+
+[Alternative Allocators]: build-configuration.md#alternative-allocators_zh
+
+## 避免回归
+
+为了确保代码执行时的分配次数和/或大小不会意外增加，您可以使用 [dhat-rs] 的 *堆使用测试* 功能编写测试，检查特定代码段分配了预期量的堆内存。
+
+[dhat-rs]: https://crates.io/crates/dhat

@@ -14,11 +14,19 @@
 [`Condvar`]: https://doc.rust-lang.org/std/sync/struct.Condvar.html
 [`Once`]: https://doc.rust-lang.org/std/sync/struct.Once.html
 
+## `Box`
+表达式 [`Box::default()`] 的效果与 `Box::new(T::default())` 相同，但可能更快，因为编译器可以直接在堆上创建值，而不是在堆栈上构造值然后复制它。
+[**示例**](https://github.com/komora-io/art/commit/d5dc58338f475709c375e15976d0d77eb5d7f7ef)。
+
+[`Box::default()`]: https://doc.rust-lang.org/std/boxed/struct.Box.html#method.default
+
 ## `Vec`
 
-[`Vec::remove`]删除某一特定索引上的一个元素，并将随后的所有元素向左移动一个，这样做是O(n)。[`Vec::swap_remove`] 用最后一个元素替换特定索引上的一个元素，虽然不保留排序，但也是O(1)。
+创建长度为 `n` 的零填充 `Vec` 的最佳方法是使用 `vec![0; n]`。这种方法简单且可能比其他方法更快，比如使用 `resize`、`extend` 或涉及 `unsafe` 的任何操作，因为它可以利用操作系统的帮助。
 
-`Vec::retain`] 有效地从一个`Vec`中删除多个项目。对于其他集合类型，如`String`、`HashSet`和`HashMap`，也有一个等价的方法。
+[`Vec::remove`] 会移除特定索引处的元素，并将所有后续元素向左移动一个位置，这使得它的时间复杂度为 O(n)。[`Vec::swap_remove`] 会用最后一个元素替换特定索引处的元素，这不会保留顺序，但时间复杂度为 O(1)。
+
+[`Vec::retain`] 可以高效地从 `Vec` 中移除多个项。其他集合类型如 `String`、`HashSet` 和 `HashMap` 也有类似的方法。
 
 [`Vec::remove`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.remove
 [`Vec::swap_remove`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.swap_remove
@@ -52,16 +60,23 @@ let r = o.ok_or_else(|| expensive()); // evaluates `expensive()` only when neede
 [`Result::map_or`]: https://doc.rust-lang.org/std/result/enum.Result.html#method.map_or
 [`Result::unwrap_or`]: https://doc.rust-lang.org/std/result/enum.Result.html#method.unwrap_or
 
-## `Rc`
+## `Rc`/`Arc`
 
-[`Rc::make_mut`]为`Rc`提供了write-on-write语义。它对`Rc`做了一个可改变的引用。如果refcount大于1，它将`clone`内部值以确保唯一的所有权；否则，它将修改原始值。它不经常需要，但偶尔会非常有用。
+[`Rc::make_mut`]/[`Arc::make_mut`]提供了clone-on-write语义。它对`Rc`做了一个可改变的引用。如果refcount大于1，它将`clone`内部值以确保唯一的所有权；否则，它将修改原始值。它不经常需要，但偶尔会非常有用。
 [**Example 1**](https://github.com/rust-lang/rust/pull/65198/commits/3832a634d3aa6a7c60448906e6656a22f7e35628),
 [**Example 2**](https://github.com/rust-lang/rust/pull/65198/commits/75e0078a1703448a19e25eac85daaa5a4e6e68ac).
 
 [`Rc::make_mut`]: https://doc.rust-lang.org/std/rc/struct.Rc.html#method.make_mut
+[`Arc::make_mut`]: https://doc.rust-lang.org/std/sync/struct.Arc.html#method.make_mut
 
 ## `Mutex`, `RwLock`, `Condvar`, and `Once`
 
-[`parking_lot`]提供了这些同步类型的替代实现，它们比标准库中的同步类型更小、更快、更灵活。`parking_lot`类型的API和语义与标准库中的等价类型相似，但不完全相同。
+[`parking_lot`] crate提供了这些同步类型的替代实现。`parking_lot` 类型的API和语义与标准库中等效类型的类似但并非完全相同。
+
+过去，`parking_lot` 版本通常比标准库中的版本更小、更快、更灵活，但在某些平台上，标准库版本已经有了很大改进。因此，在切换到 `parking_lot` 之前，您应该进行测量。
 
 [`parking_lot`]: https://crates.io/crates/parking_lot
+
+如果决定普遍使用 `parking_lot` 类型，很容易在某些地方意外地使用标准库的等效类型。您可以使用 [Clippy] 来避免这个问题。
+
+[Clippy]: linting.md#disallowing-types

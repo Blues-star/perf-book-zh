@@ -67,7 +67,22 @@ buf.flush()?;
 
 [`flush`]: https://doc.rust-lang.org/std/io/trait.Write.html#tymethod.flush
 
-请注意，缓冲也适用于stdout，所以当你向stdout进行大量写入时，你可能需要结合手动锁定*和*缓冲。
+在编写时忘记使用缓冲区是比较常见的。无缓冲和有缓冲的写入器都实现了 [Write] trait，这意味着向无缓冲写入器和有缓冲写入器写入的代码基本相同。相比之下，无缓冲读取器实现了 [Read] trait，但有缓冲读取器实现了 [BufRead] trait，这意味着从无缓冲读取器和有缓冲读取器读取的代码是不同的。例如，使用无缓冲读取器逐行读取文件是困难的，但使用有缓冲读取器通过 [BufRead::read_line] 或 [BufRead::lines] 则很简单。因此，对于读取器来说，很难像对写入器那样编写一个示例，其中之前和之后的版本是如此相似。
+
+[`Write`]: https://doc.rust-lang.org/std/io/trait.Write.html
+[`Read`]: https://doc.rust-lang.org/std/io/trait.Read.html
+[`BufRead`]: https://doc.rust-lang.org/std/io/trait.BufRead.html
+[`BufRead::read_line`]: https://doc.rust-lang.org/std/io/trait.BufRead.html#method.read_line
+[`BufRead::lines`]: https://doc.rust-lang.org/std/io/trait.BufRead.html#method.lines
+
+最后，请注意，缓冲也适用于标准输出(stdout)，因此当向标准输出频繁写入时，您可能希望结合手动锁定和缓冲。
+
+## Reading Lines from a File
+
+[这一部分]解释了如何在使用 [BufRead] 逐行读取文件时避免过多的内存分配。
+
+[这一部分]: heap-allocations_zh.md#reading-lines-from-a-file
+[`BufRead`]: https://doc.rust-lang.org/std/io/trait.BufRead.html
 
 ## Reading Input as Raw Bytes
 

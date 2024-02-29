@@ -1,4 +1,3 @@
-
 # <span style="font-size: 150%">RUST性能手册</span>
 
 **<span style="font-size: 130%">First published in November 2020</span>**
