@@ -74,7 +74,7 @@ LTO的第三种形式是fat LTO，它更具侵略性，可能会进一步提高�
 
 #### jemalloc
 
-一种流行的适用于Linux和Mac的替代分配器是[jemalloc]，可通过[tikv-jemallocator] crate使用。要使用它，请在您的Cargo.toml文件中添加一个依赖项：
+一种流行的适用于Linux和Mac的替代分配器是[jemalloc]，可通过[`tikv-jemallocator`] crate使用。要使用它，请在您的Cargo.toml文件中添加一个依赖项：
 ```toml
 [dependencies]
 tikv-jemallocator = "0.5"
@@ -85,10 +85,9 @@ tikv-jemallocator = "0.5"
 static GLOBAL: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
 ```
 
-此外，在Linux上，jemalloc可以配置为使用[透明大页][transparent huge
-pages]（THP）。这可以进一步加快程序的运行速度，可能会以更高的内存使用为代价。
+此外，在Linux上，jemalloc可以配置为使用[透明大页][THP]。这可以进一步加快程序的运行速度，可能会以更高的内存使用为代价。
 
-[透明大页]: https://www.kernel.org/doc/html/next/admin-guide/mm/transhuge.html
+[THP]: https://www.kernel.org/doc/html/next/admin-guide/mm/transhuge.html
 
 在构建程序之前，通过适当设置 `MALLOC_CONF` 环境变量来执行此操作，例如：
 ```bash
