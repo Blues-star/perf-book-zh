@@ -13,6 +13,7 @@
 - [类型大小](type-sizes_zh.md)
 - [标准库类型](standard-library-types_zh.md)
 - [迭代器](iterators_zh.md)
+- [边界检查](bounds-checks_zh.md)
 - [I/O](io_zh.md)
 - [日志和调试](logging-and-debugging_zh.md)
 - [封装类型](wrapper-types_zh.md)
