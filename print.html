@@ -241,15 +241,14 @@ lto = false
 <h3 id="替代分配器"><a class="header" href="#替代分配器">替代分配器</a></h3>
 <p>可以使用替代分配器替换Rust程序使用的默认（系统）堆分配器。具体效果取决于个别程序和所选择的替代分配器，但在实践中已经看到了运行时速度大幅提升和内存使用大幅减少。效果还会因平台而异，因为每个平台的系统分配器都有其优势和劣势。使用替代分配器还可能增加二进制文件大小和编译时间。</p>
 <h4 id="jemalloc"><a class="header" href="#jemalloc">jemalloc</a></h4>
-<p>一种流行的适用于Linux和Mac的替代分配器是<a href="https://github.com/jemalloc/jemalloc">jemalloc</a>，可通过[tikv-jemallocator] crate使用。要使用它，请在您的Cargo.toml文件中添加一个依赖项：</p>
+<p>一种流行的适用于Linux和Mac的替代分配器是<a href="https://github.com/jemalloc/jemalloc">jemalloc</a>，可通过<a href="https://crates.io/crates/tikv-jemallocator"><code>tikv-jemallocator</code></a> crate使用。要使用它，请在您的Cargo.toml文件中添加一个依赖项：</p>
 <pre><code class="language-toml">[dependencies]
 tikv-jemallocator = "0.5"
 </code></pre>
 <p>然后在您的Rust代码中添加以下内容，例如在<code>src/main.rs</code>的顶部：</p>
 <pre><code class="language-rust ignore">#[global_allocator]
 static GLOBAL: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;</code></pre>
-<p>此外，在Linux上，jemalloc可以配置为使用[透明大页][transparent huge
-pages]（THP）。这可以进一步加快程序的运行速度，可能会以更高的内存使用为代价。</p>
+<p>此外，在Linux上，jemalloc可以配置为使用<a href="https://www.kernel.org/doc/html/next/admin-guide/mm/transhuge.html">透明大页</a>。这可以进一步加快程序的运行速度，可能会以更高的内存使用为代价。</p>
 <p>在构建程序之前，通过适当设置 <code>MALLOC_CONF</code> 环境变量来执行此操作，例如：</p>
 <pre><code class="language-bash">MALLOC_CONF="thp:always,metadata_thp:always" cargo build --release
 </code></pre>
@@ -358,14 +357,13 @@ codegen-backend = "cranelift"
 </ul>
 <p>最后，<a href="https://github.com/rust-lang/rust/issues/103595">此问题</a>跟踪了Rust编译器自身构建配置的演变。Rust编译器的构建系统比大多数Rust程序更奇特和复杂。尽管如此，这个问题可能有助于展示如何将构建配置选择应用于大型程序。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="linting"><a class="header" href="#linting">Linting</a></h1>
-<p>[Clippy]是一个用来捕捉Rust代码中常见错误的lints集合。它是运行在Rust代码上的一个优秀工具。它还可以帮助提高性能，因为许多lints与可能导致次优性能的代码模式有关。
-[Clippy]: https://github.com/rust-lang/rust-clippy</p>
+<p><a href="https://github.com/rust-lang/rust-clippy">Clippy</a>是一个用来捕捉Rust代码中常见错误的lints集合。它是运行在Rust代码上的一个优秀工具。它还可以帮助提高性能，因为许多lints与可能导致次优性能的代码模式有关。</p>
 <p>鉴于自动检测问题优于手动检测问题，本书的其余部分将不会提及 Clippy 默认检测到的性能问题。</p>
 <h2 id="基础"><a class="header" href="#基础">基础</a></h2>
 <p>Clippy 是一个 Rust 的 lint 工具，用于静态代码分析。安装后，可以通过以下命令轻松运行：</p>
 <pre><code class="language-text">cargo clippy
 </code></pre>
-<p>可以通过访问 [lint list] 并取消选择除了 “Perf” 之外的所有 lint 组，查看完整的性能 lint 列表。</p>
+<p>可以通过访问 <a href="https://rust-lang.github.io/rust-clippy/master/">lint list</a> 并取消选择除了 “Perf” 之外的所有 lint 组，查看完整的性能 lint 列表。</p>
 <p>除了使代码更快之外，性能 lint 建议通常会导致更简单、更符合惯例的代码，因此即使对于不经常执行的代码，也值得遵循这些建议。</p>
 <p>相反，一些非性能 lint 建议可能会提高性能。例如，<a href="https://rust-lang.github.io/rust-clippy/master/index.html#ptr_arg"><code>ptr_arg</code></a> 风格 lint 建议将各种容器参数更改为切片，例如将 <code>&amp;mut Vec&lt;T&gt;</code> 参数更改为 <code>&amp;mut [T]</code>。这里的主要动机是切片提供了更灵活的 API，但也可能由于减少间接性和为编译器提供更好的优化机会而导致更快的代码。
 <a href="https://github.com/fschutt/fastblur/pull/3/files"><strong>Example</strong></a>.</p>

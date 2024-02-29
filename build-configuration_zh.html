@@ -217,15 +217,14 @@ lto = false
 <h3 id="替代分配器"><a class="header" href="#替代分配器">替代分配器</a></h3>
 <p>可以使用替代分配器替换Rust程序使用的默认（系统）堆分配器。具体效果取决于个别程序和所选择的替代分配器，但在实践中已经看到了运行时速度大幅提升和内存使用大幅减少。效果还会因平台而异，因为每个平台的系统分配器都有其优势和劣势。使用替代分配器还可能增加二进制文件大小和编译时间。</p>
 <h4 id="jemalloc"><a class="header" href="#jemalloc">jemalloc</a></h4>
-<p>一种流行的适用于Linux和Mac的替代分配器是<a href="https://github.com/jemalloc/jemalloc">jemalloc</a>，可通过[tikv-jemallocator] crate使用。要使用它，请在您的Cargo.toml文件中添加一个依赖项：</p>
+<p>一种流行的适用于Linux和Mac的替代分配器是<a href="https://github.com/jemalloc/jemalloc">jemalloc</a>，可通过<a href="https://crates.io/crates/tikv-jemallocator"><code>tikv-jemallocator</code></a> crate使用。要使用它，请在您的Cargo.toml文件中添加一个依赖项：</p>
 <pre><code class="language-toml">[dependencies]
 tikv-jemallocator = "0.5"
 </code></pre>
 <p>然后在您的Rust代码中添加以下内容，例如在<code>src/main.rs</code>的顶部：</p>
 <pre><code class="language-rust ignore">#[global_allocator]
 static GLOBAL: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;</code></pre>
-<p>此外，在Linux上，jemalloc可以配置为使用[透明大页][transparent huge
-pages]（THP）。这可以进一步加快程序的运行速度，可能会以更高的内存使用为代价。</p>
+<p>此外，在Linux上，jemalloc可以配置为使用<a href="https://www.kernel.org/doc/html/next/admin-guide/mm/transhuge.html">透明大页</a>。这可以进一步加快程序的运行速度，可能会以更高的内存使用为代价。</p>
 <p>在构建程序之前，通过适当设置 <code>MALLOC_CONF</code> 环境变量来执行此操作，例如：</p>
 <pre><code class="language-bash">MALLOC_CONF="thp:always,metadata_thp:always" cargo build --release
 </code></pre>

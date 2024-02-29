@@ -177,14 +177,13 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="linting"><a class="header" href="#linting">Linting</a></h1>
-<p>[Clippy]是一个用来捕捉Rust代码中常见错误的lints集合。它是运行在Rust代码上的一个优秀工具。它还可以帮助提高性能，因为许多lints与可能导致次优性能的代码模式有关。
-[Clippy]: https://github.com/rust-lang/rust-clippy</p>
+<p><a href="https://github.com/rust-lang/rust-clippy">Clippy</a>是一个用来捕捉Rust代码中常见错误的lints集合。它是运行在Rust代码上的一个优秀工具。它还可以帮助提高性能，因为许多lints与可能导致次优性能的代码模式有关。</p>
 <p>鉴于自动检测问题优于手动检测问题，本书的其余部分将不会提及 Clippy 默认检测到的性能问题。</p>
 <h2 id="基础"><a class="header" href="#基础">基础</a></h2>
 <p>Clippy 是一个 Rust 的 lint 工具，用于静态代码分析。安装后，可以通过以下命令轻松运行：</p>
 <pre><code class="language-text">cargo clippy
 </code></pre>
-<p>可以通过访问 [lint list] 并取消选择除了 “Perf” 之外的所有 lint 组，查看完整的性能 lint 列表。</p>
+<p>可以通过访问 <a href="https://rust-lang.github.io/rust-clippy/master/">lint list</a> 并取消选择除了 “Perf” 之外的所有 lint 组，查看完整的性能 lint 列表。</p>
 <p>除了使代码更快之外，性能 lint 建议通常会导致更简单、更符合惯例的代码，因此即使对于不经常执行的代码，也值得遵循这些建议。</p>
 <p>相反，一些非性能 lint 建议可能会提高性能。例如，<a href="https://rust-lang.github.io/rust-clippy/master/index.html#ptr_arg"><code>ptr_arg</code></a> 风格 lint 建议将各种容器参数更改为切片，例如将 <code>&amp;mut Vec&lt;T&gt;</code> 参数更改为 <code>&amp;mut [T]</code>。这里的主要动机是切片提供了更灵活的 API，但也可能由于减少间接性和为编译器提供更好的优化机会而导致更快的代码。
 <a href="https://github.com/fschutt/fastblur/pull/3/files"><strong>Example</strong></a>.</p>
